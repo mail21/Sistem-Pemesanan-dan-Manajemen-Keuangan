@@ -2,4 +2,10 @@ FILE PERTAMA
 ============
 
 testing 1 2  
-teering 4 5 6
+teering 4 5  6 
+Alternative
+===========
+lanjutin edit branch
+
+Alternative branch 1
+====================
