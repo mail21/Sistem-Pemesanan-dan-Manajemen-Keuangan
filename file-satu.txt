@@ -1,4 +1,5 @@
 FILE PERTAMA
 ============
 
-testing 1 2 3 
+testing 1 2  
+teering 4 5 6
