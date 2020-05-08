@@ -89,8 +89,6 @@
 					echo "<div class='meja mr-2 btn-warning' data-toggle='modal' data-target='#ModalAktif'  data-menu=[$str]> <span class='id'>".$meja['id_meja']."</span>". $meja['status'] ."</div>";
 				}
 			}
-
-
 		 ?>
 	</div>
 	
@@ -109,7 +107,6 @@
       </div>
       <div class="modal-body">
 
-        ...
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -135,7 +132,6 @@
 			let id = await row.dataset.id;
 			if (data == undefined) {
 				console.log("yes")
-				
 				console.log(id)
 	            let	isi =`
 <h3>Meja Masih kosong</h3>
