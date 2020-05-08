@@ -1,0 +1,21 @@
+body{
+    overflow-x: hidden;
+}
+
+.banner{
+    width: 100%;
+    background-image: url("./../image/gambar.jpg");
+    height: 25vh;
+    background-size: cover;
+}
+
+.meja{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    border: 1px solid;
+}
+
+.none{
+    display: none;
+}
