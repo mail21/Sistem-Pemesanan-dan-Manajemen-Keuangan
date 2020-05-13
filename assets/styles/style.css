@@ -11,9 +11,36 @@ body{
 
 .meja{
     display: inline-block;
+    
+    background-size: cover;
     width: 100px;
     height: 100px;
     border: 1px solid;
+}
+
+.aktif{
+    background-image: url('../image/meja.png');
+}
+
+.kosong{
+    background-image: url('../image/meja-kosong.PNG');
+}
+
+.reservasi{
+    background-image: url('../image/meja-reservasi.PNG');
+}
+
+.meja .id{
+    position: relative;
+    top: 50px;
+    left: 45px;
+    color: black;
+    font-size: 25px;
+}
+
+.inputWaktu{
+    display: inline;
+    width:90px;
 }
 
 .none{

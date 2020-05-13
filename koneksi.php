@@ -1,4 +1,4 @@
 <?php 
-    $db = mysqli_connect("localhost","root","","restoran");
+    $db = mysqli_connect("localhost","root","","restorantes");
     
 ?>

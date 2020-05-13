@@ -1,6 +1,8 @@
 <?php
 
-$db = mysqli_connect("localhost","root","","restoran2");
+// $db = mysqli_connect("localhost","root","","restoran2");
+  include "koneksi.php";
+  include "functions.php";
 
     var_dump($_POST);
 //    $id_order_list
@@ -12,15 +14,22 @@ $db = mysqli_connect("localhost","root","","restoran2");
     $harga 	= str_replace("Rp.", "", $_POST['harga']);
     $total 	= str_replace("Rp.", "", $_POST['total']);
     $ket = $_POST['deskripsi'];
-
-    // INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`, `id_staff`, `harga`, `quantity`, `total`, `ket`) VALUES (NULL, '', '1', '1', '1', '12', '2', '123', 'sad')
-    $query = "INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`, `id_staff`, `harga`, `quantity`, `total`, `ket`) VALUES (NULL, '0', '$id_meja', '$id_menu', '1', '$harga', '$quantity', '$total', '$ket')";
+    echo $quantity . "<br>";
+    echo $id_meja . "<br>";
+    echo $id_menu . "<br>";
+    echo $harga . "<br>";
+    echo $total ."<br>";
+    echo $ket . "<br>";
     
-    if (mysqli_query($db,$query)) {
-        echo "New record created successfully";
-      } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($db);
-      }
+    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, 'kosong', '$id_meja', '$id_menu', '1', '$harga', '$quantity', '$total', '$ket')");
+    // if($cek){
+    //   echo "berhasil";
+    // }else{
+    //   echo "gagal";
+    //   echo mysqli_error($db);
+    // }
+    
+    mysqli_query($db, "UPDATE meja SET id_reservasi = '1', status = 'aktif' WHERE id_meja = $id_meja");
     header("location:index.php");
 
 
