@@ -66,11 +66,12 @@
 								$str.=",";
 							}
 							// $nama = $menus['nama'];
+							$id = $menus['id_order_list'];
 							$nama = preg_replace('/\s+/', '', $menus['nama']);
 							$qt = $menus['quantity'];
 							$total = $menus['total'];
 							$ket = preg_replace('/\s+/', '', $menus['ket']);
-							$str .= "{'nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
+							$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
 							$a++;
 						}
 						echo $str;
@@ -86,7 +87,7 @@
 
 	<!-- Modal Pesanan Aktif -->
 	<div class="modal fade" id="ModalAktif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog " role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Order</h5>
@@ -103,11 +104,8 @@
 	<!-- Modal Pesanan Aktif -->
 	
 </div>
-</body>
-no_transaksi 	id_order_list 	id_menu 	id_sumber 	tanggal 	harga 	quantity 	total 	kembalian 
-<form action="cetakStruk.php" method="POST">
-	
-</form>
+</body>	 	 	 	 	 	 	 
+
 
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -122,7 +120,7 @@ no_transaksi 	id_order_list 	id_menu 	id_sumber 	tanggal 	harga 	quantity 	total
 	for (const row of rows) {
 		row.addEventListener("click", async (e)=>{
 			const modalBody = document.querySelector('.modal-body');
-			
+			document.querySelector('.modal-dialog').classList.remove('modal-lg');
 			let id = await row.dataset.id;
 			let statusMeja = await row.dataset.status;
 			if (statusMeja == "kosong") {
@@ -151,21 +149,44 @@ no_transaksi 	id_order_list 	id_menu 	id_sumber 	tanggal 	harga 	quantity 	total
 					document.querySelector(".formReservasi").toggleAttribute('hidden');
 				})
 			}else if(statusMeja == "aktif"){
+				document.querySelector('.modal-dialog').classList.add('modal-lg');
 				let data = await row.dataset.menu;
 				console.log(data);
 				data = data.replace(/\'/g, '"');
 				const menu = JSON.parse(data)
 				console.log(menu)
-				let isi = "";
+				let isi = `
+<form action="cetakStruk.php" method="POST">
+<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
+	<input type="hidden" name="idOrderList">
+	<input type="hidden" name="idMenu">
+	<input type="hidden" name="idSumber">
+	<input type="hidden" name="tanggal">
+	<input type="hidden" name="harga">
+	<input type="hidden" name="quantity">
+	<input type="hidden" name="total">
+	<input type="hidden" name="kembalian">
+	<table cellpadding="6">`;
+				let ket = 'Keterangan : <br>';
 	            for (makan of menu) {
-	            	isi +=`Pesan : ${makan.nama},jumlah : ${makan.quantity},total : ${makan.total},keterangan : ${makan.ket}`; 
+					ket += `- ${makan.ket}<br>`
+					isi += `
+					<tr>
+						<td>${makan.id}</td>
+						<td>${makan.nama}</td>
+						<td>${makan.quantity} Porsi</td>
+						<td>${makan.total}</td>
+					</tr>`;
+	            	isi +=`Pesan : ,jumlah : ,total : ${makan.total},keterangan : ${makan.ket}`; 
 	            }
+				isi += `<tr><td colspan="4">${ket}</td></tr></table></form>`;
 	            modalBody.innerHTML = isi;
 			}else if(statusMeja == "reservasi"){
 				let nama_pelanggan = await row.dataset.pelanggan;
 				let	isi =`
 <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
-<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>`; 
+<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
+<a href="kosong.php?nama='${nama_pelanggan}'"><button type="button" class="btn btn-primary">Kosongkan</button></a>`;
 	            modalBody.innerHTML = isi;
 			}
 		})

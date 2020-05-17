@@ -21,7 +21,7 @@
     echo $total ."<br>";
     echo $ket . "<br>";
     
-    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, 'kosong', '$id_meja', '$id_menu', '1', '$harga', '$quantity', '$total', '$ket')");
+    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, '000000000000', '$id_meja', '$id_menu', '1', '$harga', '$quantity', '$total', '$ket')");
     // if($cek){
     //   echo "berhasil";
     // }else{

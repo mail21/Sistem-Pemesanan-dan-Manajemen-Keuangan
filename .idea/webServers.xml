@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="233c469a-aee9-4d1c-aa93-0e35045ae8d1" name="apache (project level)" url="http://localhost/restoranKP">
+        <fileTransfer port="0" mountedRoot="C:\xampp\htdocs\restoranKP" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
