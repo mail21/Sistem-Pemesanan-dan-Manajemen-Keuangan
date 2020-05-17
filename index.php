@@ -74,7 +74,6 @@
 							$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
 							$a++;
 						}
-						echo $str;
 						echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."'  data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
 					}
 				}
@@ -102,10 +101,8 @@
 		</div>
 	</div>
 	<!-- Modal Pesanan Aktif -->
-	
 </div>
-</body>	 	 	 	 	 	 	 
-
+</body>	
 
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -153,22 +150,32 @@
 				let data = await row.dataset.menu;
 				console.log(data);
 				data = data.replace(/\'/g, '"');
-				const menu = JSON.parse(data)
-				console.log(menu)
+				const menu = JSON.parse(data);
+				let date = new Date();
+				let bulan = date.getMonth() + 1;
+				let tanggal = date.getDate();
+				if (bulan <= 10) {
+					bulan = `0${bulan}`; 
+				}
+				if (tanggal <= 10) {
+					tanggal = `0${tanggal}`;
+				}
+				let seconds = date.getSeconds() <= 9 ? `0${date.getSeconds()}` : date.getSeconds();
+				let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes();
+				let hours = date.getHours() <= 9 ? `0${date.getHours()}` : date.getHours();
+				let waktu = `${date.getFullYear()}-${bulan}-${tanggal} ${hours}:${minutes}:${seconds}`;
+				console.log(waktu);
 				let isi = `
-<form action="cetakStruk.php" method="POST">
-<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
-	<input type="hidden" name="idOrderList">
-	<input type="hidden" name="idMenu">
-	<input type="hidden" name="idSumber">
-	<input type="hidden" name="tanggal">
-	<input type="hidden" name="harga">
-	<input type="hidden" name="quantity">
-	<input type="hidden" name="total">
-	<input type="hidden" name="kembalian">
-	<table cellpadding="6">`;
+		<form action="cetakStruk.php" method="POST">
+		<a href="menu.php"><button type="button" class="btn btn-primary mb-3">Pesan</button></a>
+			<input type="hidden" name="idSumber" value="1">
+			<input type="hidden" name="tanggal" value="${waktu}">
+			
+			<table class="mb-3" cellpadding="6">`;
 				let ket = 'Keterangan : <br>';
+				let totalOrder = 0;
 	            for (makan of menu) {
+					totalOrder += makan.total;
 					ket += `- ${makan.ket}<br>`
 					isi += `
 					<tr>
@@ -177,16 +184,33 @@
 						<td>${makan.quantity} Porsi</td>
 						<td>${makan.total}</td>
 					</tr>`;
-	            	isi +=`Pesan : ,jumlah : ,total : ${makan.total},keterangan : ${makan.ket}`; 
 	            }
-				isi += `<tr><td colspan="4">${ket}</td></tr></table></form>`;
+				isi += `<tr style="border-top:1px solid;"><td colspan="3" align="right">Total :</td><td align="right">${totalOrder}</td></tr>`;
+				isi += `<tr><td colspan="4">${ket}</td></tr></table>`;
+				isi += `
+				<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Input Uang</button>
+				<button type="submit" disabled id="btnKonfirmasi" class="btn btn-info">Konfirmasi Bayar</button>
+				<div id="demo" class="collapse">
+				<input id="inputUang" name="inputUang" type="text" class="form-control mt-3" placeholder="Masukkan Pembayaran">
+				</div> 
+				<input type="hidden" name="total" value="${totalOrder}">
+				</form>
+				`;
 	            modalBody.innerHTML = isi;
+				const inputUang = document.querySelector("#inputUang");
+				inputUang.addEventListener("input",(e)=>{
+					if(inputUang.value >= totalOrder){
+						document.querySelector('#btnKonfirmasi').disabled = false;
+					}else{
+						document.querySelector('#btnKonfirmasi').disabled = true;
+					}
+				})
 			}else if(statusMeja == "reservasi"){
 				let nama_pelanggan = await row.dataset.pelanggan;
 				let	isi =`
-<h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
-<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
-<a href="kosong.php?nama='${nama_pelanggan}'"><button type="button" class="btn btn-primary">Kosongkan</button></a>`;
+		<h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
+		<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
+		<a href="kosong.php?nama='${nama_pelanggan}'"><button type="button" class="btn btn-primary">Kosongkan</button></a>`;
 	            modalBody.innerHTML = isi;
 			}
 		})
