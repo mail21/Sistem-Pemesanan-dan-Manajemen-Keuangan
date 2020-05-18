@@ -3,7 +3,25 @@
 	include "koneksi.php";
 	include "functions.php";
 	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi");
-	
+	$orderListQuery = query("SELECT 
+	meja.id_meja AS nomormeja,
+	menu.nama AS namamenu,
+	staff.nama AS namastaff,
+	menu.harga AS Harga,
+	order_list.quantity AS quantity,
+	order_list.total AS total,
+	order_list.ket AS keterangan,
+	meja.status AS status
+	FROM
+	order_list JOIN meja 
+		ON order_list.id_meja = meja.id_meja
+	JOIN staff 
+		ON order_list.id_staff = staff .id_staff
+	JOIN menu 
+		ON order_list.id_menu = menu.id_menu
+		
+	WHERE meja.status = 'aktif' AND order_list.no_transaksi = '0000000'
+	ORDER BY order_list.id_order_list DESC");
 
  ?>
 <!DOCTYPE html>
@@ -36,16 +54,17 @@
 
 		<div class="container-fluid banner"></div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+        <button class="btn btn-info" id="menu-toggle">Toggle Menu</button>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+		<button type="button" class="btn btn-info btnDenah ml-2" aria-pressed="false" autocomplete="off">
+			Denah
 		</button>
-		<button>Denah</button>
-		<button>Order List</button>
+		<button type="button" class="btn btn-info btnOrderList ml-2" aria-pressed="false" autocomplete="off">
+			Order List 
+		</button>
       </nav>
-
-		<div class="container-fluid mt-3">
+		<!-- =============================== Denah ================================== -->
+		<div class="container-fluid mt-3 containerDenah">
 		<img src="">
 			<?php 
 				
@@ -58,14 +77,13 @@
 					}else{
 						$menu = [];
 						$id = $meja['id_meja'];
-						$menuQuery = query("SELECT * FROM order_list JOIN menu ON order_list.id_menu = menu.id_menu WHERE id_meja = ".$meja['id_meja']);
+						$menuQuery = query("SELECT * FROM order_list JOIN menu ON order_list.id_menu = menu.id_menu WHERE id_meja = ".$meja['id_meja']." AND order_list.no_transaksi = '0000000'");
 						$str = "";
 						$a = 0;
 						foreach ($menuQuery as $menus) {
 							if ($a>0) {
 								$str.=",";
 							}
-							// $nama = $menus['nama'];
 							$id = $menus['id_order_list'];
 							$nama = preg_replace('/\s+/', '', $menus['nama']);
 							$qt = $menus['quantity'];
@@ -79,7 +97,49 @@
 				}
 			?>
 		</div>
-	
+		<!-- =============================== Denah ================================== -->
+					
+	 
+		
+		<!-- =============================== OrderList ================================== -->
+		<div class="container mt-3 containerOrderList" hidden>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+						<th scope="col">Nomor</th>
+						<th scope="col">Nomor Meja</th>
+						<th scope="col">Nama Menu</th>
+						<th scope="col">Nama Staff</th>
+						<th scope="col">Harga</th>
+						<th scope="col">Quantity</th>
+						<th scope="col">Total</th>
+						<th scope="col">Keterangan</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$no = 0;
+						foreach($orderListQuery as $order){
+							$no++;
+							echo "<tr>
+								<th scope='row'>$no</th>
+								<td>".$order['nomormeja']."</td>
+								<td>".$order['namamenu']."</td>
+								<td>".$order['namastaff']."</td>
+								<td>".$order['Harga']."</td>
+								<td>".$order['quantity']."</td>
+								<td>".$order['total']."</td>
+								<td>".$order['keterangan']."</td>
+							</tr>";
+						} 
+						?>
+						
+					</tbody>
+					</table>
+
+		</div>
+		<!-- =============================== OrderList ================================== -->
+
 	</div>
     <!-- /#page-content-wrapper -->
 
@@ -111,6 +171,19 @@
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
     });
+
+	const btnDenah = document.querySelector('.btnDenah');
+	const  btnOrderList = document.querySelector('.btnOrderList');
+	const containerDenah = document.querySelector('.containerDenah');
+	const  containerOrderList = document.querySelector('.containerOrderList');
+	btnDenah.addEventListener("click", ()=>{
+		containerDenah.toggleAttribute('hidden');
+		containerOrderList.toggleAttribute('hidden');
+	});
+	btnOrderList.addEventListener("click", ()=>{
+		containerDenah.toggleAttribute('hidden');
+		containerOrderList.toggleAttribute('hidden');
+	})
 	
 	// =======================   meja ===============================
 	let rows = document.querySelectorAll(".meja");
@@ -118,17 +191,17 @@
 		row.addEventListener("click", async (e)=>{
 			const modalBody = document.querySelector('.modal-body');
 			document.querySelector('.modal-dialog').classList.remove('modal-lg');
-			let id = await row.dataset.id;
+			let id_meja = await row.dataset.id;
 			let statusMeja = await row.dataset.status;
 			if (statusMeja == "kosong") {
-				console.log(id)
+				console.log(id_meja)
 	            let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
 <a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
 <div class="formReservasi" hidden>
 	<form action="reservasi.php" method="POST">
-		<input type="hidden" name="id" value="${id}">
+		<input type="hidden" name="id" value="${id_meja}">
 		<label for="no">Jam:</label>
 		<input name="jam" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no">
 		<input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="Menit">
@@ -148,29 +221,15 @@
 			}else if(statusMeja == "aktif"){
 				document.querySelector('.modal-dialog').classList.add('modal-lg');
 				let data = await row.dataset.menu;
+				console.log(id_meja)
 				console.log(data);
 				data = data.replace(/\'/g, '"');
 				const menu = JSON.parse(data);
-				let date = new Date();
-				let bulan = date.getMonth() + 1;
-				let tanggal = date.getDate();
-				if (bulan <= 10) {
-					bulan = `0${bulan}`; 
-				}
-				if (tanggal <= 10) {
-					tanggal = `0${tanggal}`;
-				}
-				let seconds = date.getSeconds() <= 9 ? `0${date.getSeconds()}` : date.getSeconds();
-				let minutes = date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes();
-				let hours = date.getHours() <= 9 ? `0${date.getHours()}` : date.getHours();
-				let waktu = `${date.getFullYear()}-${bulan}-${tanggal} ${hours}:${minutes}:${seconds}`;
-				console.log(waktu);
 				let isi = `
 		<form action="cetakStruk.php" method="POST">
 		<a href="menu.php"><button type="button" class="btn btn-primary mb-3">Pesan</button></a>
 			<input type="hidden" name="idSumber" value="1">
-			<input type="hidden" name="tanggal" value="${waktu}">
-			
+		<input type="hidden" name="id_meja" value="${id_meja}">
 			<table class="mb-3" cellpadding="6">`;
 				let ket = 'Keterangan : <br>';
 				let totalOrder = 0;
