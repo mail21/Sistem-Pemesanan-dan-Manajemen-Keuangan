@@ -44,7 +44,7 @@
       <div class="list-group list-group-flush">
         <a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
-        <a href="laporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a>
+        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a>
       </div>
     </div>
 	<!-- /#sidebar-wrapper -->
@@ -64,38 +64,75 @@
 		</button>
       </nav>
 		<!-- =============================== Denah ================================== -->
-		<div class="container-fluid mt-3 containerDenah">
-		<img src="">
-			<?php 
-				
-				foreach ($mejaQuery as $meja) {
-					$status = $meja['status'];
-					if ($meja['status'] === "kosong") {
-						echo "<div class='meja $status mr-2' data-toggle='modal' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'><span class='id'>".$meja['id_meja']."</span></div>";
-					}else if($meja['status'] === "reservasi"){
-						echo "<div class='meja $status mr-2' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
-					}else{
-						$menu = [];
-						$id = $meja['id_meja'];
-						$menuQuery = query("SELECT * FROM order_list JOIN menu ON order_list.id_menu = menu.id_menu WHERE id_meja = ".$meja['id_meja']." AND order_list.no_transaksi = '0000000'");
-						$str = "";
-						$a = 0;
-						foreach ($menuQuery as $menus) {
-							if ($a>0) {
-								$str.=",";
+		<div class="container-fluid mt-3">
+			<div>
+				<span style="
+				display:inline-block;
+				background-color:yellow;
+				width:15px;height:15px;
+				"></span>
+				Kasir
+				<br>
+				<span style="
+				display:inline-block;
+				background-color:black;
+				width:15px;height:15px;
+				"></span>
+				Pintu
+				<br>
+				<div class="aktif" style="display:inline-block;width:30px;height:30px; background-size: cover;"></div>
+				Meja Aktif
+				<br>
+				<div class="kosong" style="display:inline-block;width:30px;height:30px; background-size: cover;"></div>
+				Meja Kosong
+				<br>
+				<div class="reservasi" style="display:inline-block;width:30px;height:30px; background-size: cover;"></div>
+				Meja Reservasi
+			</div>
+			<br>
+			<div class="containerDenah">
+				<div class="atas"></div>
+				<div class="kiri"></div>
+				<div class="bawah"></div>
+				<div class="kanan"></div>
+				<div class="tengah"></div>
+				<div class="tengah"></div>
+				<div class="tengah"></div>
+				<div class="tengah"></div>
+				<?php 
+					foreach ($mejaQuery as $meja) {
+						$status = $meja['status'];
+						if ($meja['status'] === "kosong") {
+							echo "<div class='meja $status mr-2' data-toggle='modal' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'><span class='id'>".$meja['id_meja']."</span></div>";
+						}else if($meja['status'] === "reservasi"){
+							echo "<div class='meja $status mr-2' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
+						}else{
+							$menu = [];
+							$id = $meja['id_meja'];
+							$menuQuery = query("SELECT * FROM order_list JOIN menu ON order_list.id_menu = menu.id_menu WHERE id_meja = ".$meja['id_meja']." AND order_list.no_transaksi = '0000000'");
+							$str = "";
+							$a = 0;
+							foreach ($menuQuery as $menus) {
+								if ($a>0) {
+									$str.=",";
+								}
+								$id = $menus['id_order_list'];
+								$nama = preg_replace('/\s+/', '', $menus['nama']);
+								$qt = $menus['quantity'];
+								$total = $menus['total'];
+								$ket = preg_replace('/\s+/', '', $menus['ket']);
+								$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
+								$a++;
 							}
-							$id = $menus['id_order_list'];
-							$nama = preg_replace('/\s+/', '', $menus['nama']);
-							$qt = $menus['quantity'];
-							$total = $menus['total'];
-							$ket = preg_replace('/\s+/', '', $menus['ket']);
-							$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
-							$a++;
+							echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."'  data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
 						}
-						echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."'  data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
 					}
-				}
-			?>
+				?>
+				<div style=" width: 250px; display:flex; justify-content: space-between;">
+				<div style="width: 30%; height: 170px; display: inline-block; background-color: yellow;  "></div>
+				<div style="width: 10%; height: 170px; display: inline-block; background-color: black;"></div>
+				</div>
+			</div>
 		</div>
 		<!-- =============================== Denah ================================== -->
 					
@@ -175,6 +212,34 @@
 	const btnDenah = document.querySelector('.btnDenah');
 	const  btnOrderList = document.querySelector('.btnOrderList');
 	const containerDenah = document.querySelector('.containerDenah');
+	const allMeja = document.querySelectorAll('.meja');
+	let index = 1;
+	const mejaAtas = document.querySelector(".atas");
+	const mejaBawah = document.querySelector(".bawah");
+	const mejaKiri = document.querySelector(".kiri");
+	const mejaKanan = document.querySelector(".kanan");
+	const mejaTengah = document.querySelectorAll(".tengah");
+	for (let meja of allMeja) {
+		if(index <= 4){
+			mejaAtas.appendChild(meja);
+		}else if(index <= 8){
+			mejaBawah.appendChild(meja);
+		}else if(index <= 10){
+			mejaKiri.appendChild(meja);
+		}else if(index <= 12){
+			mejaKanan.appendChild(meja);
+		}else if(index <= 14){
+			mejaTengah[0].appendChild(meja);
+		}else if(index <= 16){
+			mejaTengah[1].appendChild(meja);
+		}else if(index <= 18){
+			mejaTengah[2].appendChild(meja);
+		}else if(index <= 20){
+			mejaTengah[3].appendChild(meja);
+		}
+		index++;
+	}
+
 	const  containerOrderList = document.querySelector('.containerOrderList');
 	btnDenah.addEventListener("click", ()=>{
 		containerDenah.toggleAttribute('hidden');

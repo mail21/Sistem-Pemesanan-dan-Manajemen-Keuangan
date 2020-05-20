@@ -13,13 +13,13 @@ body{
     display: inline-block;
     
     background-size: cover;
-    width: 100px;
-    height: 100px;
-    border: 1px solid;
+    width: 90px;
+    height: 90px;
 }
 
 .aktif{
     background-image: url('../image/meja.png');
+    border: 1px solid;
 }
 
 .kosong{
@@ -49,4 +49,61 @@ td{
 
 .none{
     display: none;
+}
+
+/* ================= Posisi ======================== */
+
+.containerDenah{
+    width: 90%;
+    margin: auto;
+    height: 700px;
+    border: 1px dashed;
+    display: grid;
+    grid-template-areas: 
+    "atas atas atas atas"
+    "kiri tengah tengah  kanan"
+    "kiri tengah tengah  kanan"
+    "bawah bawah bawah bawah ";
+}
+
+
+.tengah{
+    display: flex;
+    justify-content:space-around;
+}
+
+.kotak{
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    background-color: yellow;
+    border:1px solid;
+}
+
+.atas{
+  grid-area: atas;
+  display: flex;
+  justify-content: space-around;
+}
+
+.kiri{
+    grid-area: kiri;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.kanan{
+    grid-area:kanan;
+    display: flex;      
+    justify-content: space-around;
+    align-items: flex-end;
+    flex-direction: column;
+}
+
+.bawah{
+  grid-area: bawah;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 }
