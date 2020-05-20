@@ -23,7 +23,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Home</title>
+	<title>Menu </title>
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles/style.css">
@@ -40,7 +40,6 @@
 		margin: 5px 0;
 		display: inline-block;
 		width: auto;
-		background: red;
 	}
 	
 	#input_div{
@@ -92,7 +91,7 @@
       <div class="list-group list-group-flush">
 	  	<a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
-        <a href="laporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a> 
+        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a> 
 	  </div>
     </div>
 	<!-- /#sidebar-wrapper -->
@@ -102,11 +101,8 @@
 
 		<div class="container-fluid banner"></div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+        <button class="btn btn-info" id="menu-toggle">Toggle Menu</button>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
       </nav>
 
       
@@ -119,7 +115,7 @@
 				  <menu-item> ".$menuData['id_menu'] ." </menu-item>
 				  <menu-item> ".$menuData['nama'] ."</menu-item>
 				  <menu-item> Rp. ".$menuData['harga'] ."</menu-item>
-				  <menu-item> <img src='./assets/image/nasi-goreng.jpg' width='200' ></menu-item>
+				  <menu-item> <img src='./assets/image/". $menuData['gambar'] ."' width='200' ></menu-item>
 				</div>";
 			}
 		   ?>
@@ -128,6 +124,9 @@
 
     </div>
     <!-- /#page-content-wrapper -->
+
+
+	
 
 	<!-- Modal Pesanan-->
 	<div class="modal fade" id="ModalMenu" tabindex="-1" role="dialog">

@@ -65,7 +65,7 @@
       </nav>
 		<!-- =============================== Denah ================================== -->
 		<div class="container-fluid mt-3">
-			<div>
+			<div class="legenda">
 				<span style="
 				display:inline-block;
 				background-color:yellow;
@@ -240,14 +240,18 @@
 		index++;
 	}
 
-	const  containerOrderList = document.querySelector('.containerOrderList');
+	const containerOrderList = document.querySelector('.containerOrderList');
+	const containerLegenda = document.querySelector(".legenda");
 	btnDenah.addEventListener("click", ()=>{
 		containerDenah.toggleAttribute('hidden');
 		containerOrderList.toggleAttribute('hidden');
+		containerLegenda.toggleAttribute('hidden');
+
 	});
 	btnOrderList.addEventListener("click", ()=>{
 		containerDenah.toggleAttribute('hidden');
 		containerOrderList.toggleAttribute('hidden');
+		containerLegenda.toggleAttribute('hidden');
 	})
 	
 	// =======================   meja ===============================
@@ -255,11 +259,11 @@
 	for (const row of rows) {
 		row.addEventListener("click", async (e)=>{
 			const modalBody = document.querySelector('.modal-body');
+			const modalTitle = document.querySelector('.modal-title');
 			document.querySelector('.modal-dialog').classList.remove('modal-lg');
 			let id_meja = await row.dataset.id;
 			let statusMeja = await row.dataset.status;
 			if (statusMeja == "kosong") {
-				console.log(id_meja)
 	            let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
@@ -279,6 +283,7 @@
 	</form>
 </div>`; 
 	            modalBody.innerHTML = isi;
+				modalTitle.textContent = `Meja ${id_meja}`;
 				let reservasiToggle = document.querySelector(".reservasiToggle")
 				reservasiToggle.addEventListener('click', function(){
 					document.querySelector(".formReservasi").toggleAttribute('hidden');
@@ -290,6 +295,7 @@
 				console.log(data);
 				data = data.replace(/\'/g, '"');
 				const menu = JSON.parse(data);
+				modalTitle.textContent = `Meja ${id_meja}`;
 				let isi = `
 		<form action="cetakStruk.php" method="POST">
 		<a href="menu.php"><button type="button" class="btn btn-primary mb-3">Pesan</button></a>
@@ -331,6 +337,7 @@
 				})
 			}else if(statusMeja == "reservasi"){
 				let nama_pelanggan = await row.dataset.pelanggan;
+				modalTitle.textContent = `Meja ${id_meja}`;
 				let	isi =`
 		<h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
 		<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>

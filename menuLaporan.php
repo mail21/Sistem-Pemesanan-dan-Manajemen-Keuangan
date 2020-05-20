@@ -103,19 +103,19 @@
               <th scope="row">1</th>
               <td>Laporan Data User</td>
               <td><button type="button" data-toggle='modal' data-target='#ModalDataUser' class="btn btn-outline-success">Lihat</button></td>
-              <td><button type="button" class="btn btn-outline-success">Download</button></td>
+              <td><a href="laporanUserData.php"><button type="button" class="btn btn-outline-success">Download</button></a></td>
               </tr>
               <tr>
               <th scope="row">2</th>
               <td>Laporan Neraca Laba Rugi</td>
               <td><button type="button" data-toggle='modal' data-target='#ModalLabarugi' class="btn btn-outline-success">Lihat</button></td>
-              <td><button type="button" class="btn btn-outline-success">Download</button></td>
+              <td><button type="button" data-toggle='modal' data-target='#DownloadModal' class="btn btn-outline-success">Download</button></td>
               </tr>
               <tr>
               <th scope="row">3</th>
               <td>Laporan Order</td>
               <td><button type="button" data-toggle='modal' data-target='#ModalOrder' class="btn btn-outline-success">Lihat</button></td>
-              <td><button type="button" class="btn btn-outline-success">Download</button></td>
+              <td><a href="laporanOrder.php"><button type="button" class="btn btn-outline-success">Download</button></a></td>
               </tr>
           </tbody>
           </table>
@@ -164,6 +164,51 @@
 
     </div>
     <!-- /#page-content-wrapper -->
+
+    <!-- Modal Download Labarugi -->
+<div class="modal fade" id="DownloadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Download</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form action="laporanLabaRugi.php" method="POST">
+      <div class="form-group">
+    <label for="exampleFormControlSelect1">Tahun</label>
+    <select name="tahun" class="form-control" id="exampleFormControlSelect1">
+      <option value="2020">2020</option>
+      <option value="2021">2021</option>
+    </select>
+  </div> 
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Bulan</label>
+    <select name="bulan" class="form-control" id="exampleFormControlSelect1">
+      <option value="saatIni">Saat Ini</option>
+      <option value="01">Januari</option>
+      <option value="02">Februari</option>
+      <option value="03">Maret</option>
+      <option value="04">April</option>
+      <option value="05">Mei</option>
+      <option value="06">Juni</option>
+      <option value="07">Juli</option>
+      <option value="08">Agustus</option>
+      <option value="09">Septemper</option>
+      <option value="10">Oktober</option>
+      <option value="11">November</option>
+      <option value="12">Desember</option>
+    </select>
+  </div>
+      <button type="submit" class="btn btn-info">Download</button>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Download Labarugi -->
 
 	<!-- Modal Laporan Data User-->
 	<div class="modal fade" id="ModalDataUser" tabindex="-1" role="dialog">
