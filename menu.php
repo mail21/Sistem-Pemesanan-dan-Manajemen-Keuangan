@@ -1,6 +1,7 @@
 <?php 
 	include "koneksi.php";
 	include "functions.php";
+	require 'cek-sesi.php';
 	$boxMeja = query("SELECT * FROM reservasi JOIN meja ON reservasi.id_reservasi = meja.id_reservasi");
 	$boxMenu = query("SELECT * FROM menu");
 
@@ -87,12 +88,13 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , user </div>
+      <div class="sidebar-heading">Welcome , <?= $_SESSION['nama'] ?>  </div>
       <div class="list-group list-group-flush">
 	  	<a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
         <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a> 
-	  </div>
+        <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>  
+	</div>
     </div>
 	<!-- /#sidebar-wrapper -->
 	

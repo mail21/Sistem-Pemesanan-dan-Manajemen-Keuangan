@@ -3,6 +3,7 @@
 // $db = mysqli_connect("localhost","root","","restoran2");
   include "koneksi.php";
   include "functions.php";
+	require 'cek-sesi.php';
 
     var_dump($_POST);
 //    $id_order_list
@@ -14,14 +15,10 @@
     $harga 	= str_replace("Rp.", "", $_POST['harga']);
     $total 	= str_replace("Rp.", "", $_POST['total']);
     $ket = $_POST['deskripsi'];
-    echo $quantity . "<br>";
-    echo $id_meja . "<br>";
-    echo $id_menu . "<br>";
-    echo $harga . "<br>";
-    echo $total ."<br>";
-    echo $ket . "<br>";
+    $id_staff = $_SESSION['id_staff'];
+
     
-    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, '0000000', '$id_meja', '$id_menu', '1', '$harga', '$quantity', '$total', '$ket')");
+    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, '0000000', '$id_meja', '$id_menu', '$id_staff', '$harga', '$quantity', '$total', '$ket')");
     // if($cek){
     //   echo "berhasil";
     // }else{
@@ -29,7 +26,7 @@
     //   echo mysqli_error($db);
     // }
     
-    mysqli_query($db, "UPDATE meja SET id_reservasi = '1', status = 'aktif' WHERE id_meja = $id_meja");
+    mysqli_query($db, "UPDATE meja SET id_reservasi = '1', id_staff = '$id_staff' ,status = 'aktif' WHERE id_meja = $id_meja");
     header("location:index.php");
 
 
