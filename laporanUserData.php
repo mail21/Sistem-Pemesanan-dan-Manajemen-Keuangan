@@ -1,6 +1,6 @@
 <?php
 	header("Content-type: application/vnd-ms-excel");
-	header("Content-Disposition: attachment; filename=Data_laporan_staff.xls");
+	header("Content-Disposition: attachment; filename=Data_laporan_user.xls");
 	?>
 <style>
     td,th{
@@ -12,23 +12,25 @@
     include "koneksi.php";
     include "functions.php";
     
-    $staffs = query("SELECT * FROM staff");
+    $users = query("SELECT * FROM user");
     
 ?>
    <table border="1">
        <tr>
-            <th>Id Staff</th>  
+            <th>Id user</th>  
             <th>Username</th> 	
             <th>Nama</th>
+            <th>Email</th>
             <th>Tipe</th> 	 	
        </tr>
 
-       <?php foreach($staffs  as $staff): ?>
+       <?php foreach($users  as $user): ?>
         <tr>
-            <td><?= $staff['id_staff']; ?></td>  
-            <td><?= $staff['username']; ?></td> 	
-            <td><?= $staff['nama']; ?></td>
-            <td><?= $staff['tipe']; ?></td> 	 	
+            <td><?= $user['id_user']; ?></td>  
+            <td><?= $user['username']; ?></td> 	
+            <td><?= $user['nama']; ?></td>
+            <td><?= $user['email']; ?></td>
+            <td><?= $user['tipe']; ?></td> 	 	
        </tr>
        <?php endforeach; ?>
    </table>

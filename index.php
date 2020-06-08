@@ -10,7 +10,7 @@
 	$orderListQuery = query("SELECT 
 	meja.id_meja AS nomormeja,
 	menu.nama AS namamenu,
-	staff.nama AS namastaff,
+	user.nama AS namauser,
 	menu.harga AS Harga,
 	order_list.quantity AS quantity,
 	order_list.total AS total,
@@ -19,8 +19,8 @@
 	FROM
 	order_list JOIN meja 
 		ON order_list.id_meja = meja.id_meja
-	JOIN staff 
-		ON order_list.id_staff = staff .id_staff
+	JOIN user 
+		ON order_list.id_user = user.id_user
 	JOIN menu 
 		ON order_list.id_menu = menu.id_menu
 		
@@ -149,13 +149,13 @@
 		
 		<!-- =============================== OrderList ================================== -->
 		<div class="container mt-3 containerOrderList" hidden>
-				<table class="table">
+				<table class="table table-striped table-dark">
 					<thead class="thead-dark">
 						<tr>
 						<th scope="col">Nomor</th>
 						<th scope="col">Nomor Meja</th>
 						<th scope="col">Nama Menu</th>
-						<th scope="col">Nama Staff</th>
+						<th scope="col">Nama User</th>
 						<th scope="col">Harga</th>
 						<th scope="col">Quantity</th>
 						<th scope="col">Total</th>
@@ -171,7 +171,7 @@
 								<th scope='row'>$no</th>
 								<td>".$order['nomormeja']."</td>
 								<td>".$order['namamenu']."</td>
-								<td>".$order['namastaff']."</td>
+								<td>".$order['namauser']."</td>
 								<td>".$order['Harga']."</td>
 								<td>".$order['quantity']."</td>
 								<td>".$order['total']."</td>

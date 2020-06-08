@@ -6,21 +6,21 @@
 		session_destroy();
     	header("location:login.php");
 	}
-	$boxStaff = query("SELECT * FROM staff");
+	$boxUser = query("SELECT * FROM user");
 	$orderListQuery = query("SELECT 
 	order_list.no_transaksi AS nomortransaksi,
 	order_list.id_order_list AS id,
 	meja.id_meja AS nomormeja,
 	menu.nama AS namamenu,
-	staff.nama AS namastaff,
+	user.nama AS namauser,
 	menu.harga AS Harga,
 	order_list.quantity AS quantity,
 	order_list.total AS total
 	FROM
 	order_list JOIN meja 
 		ON order_list.id_meja = meja.id_meja
-	JOIN staff 
-		ON order_list.id_staff = staff .id_staff
+	JOIN user 
+		ON order_list.id_user = user.id_user
 	JOIN menu 
 		ON order_list.id_menu = menu.id_menu
 
@@ -233,19 +233,19 @@
           <table class="table table-striped">
         <thead>
             <tr>
-            <th scope="col">No Staff</th>
+            <th scope="col">No user</th>
             <th scope="col">Username</th>
             <th scope="col">Nama</th>
             <th scope="col">Tipe</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($boxStaff as $staff):  ?>
+            <?php foreach ($boxUser as $user):  ?>
             <tr>
-            <th scope="row"><?= $staff['id_staff']; ?></th>
-            <td><?= $staff['username']; ?></td>
-            <td><?= $staff['nama']; ?></td>
-            <td><?= $staff['tipe']; ?></td>
+            <th scope="row"><?= $user['id_user']; ?></th>
+            <td><?= $user['username']; ?></td>
+            <td><?= $user['nama']; ?></td>
+            <td><?= $user['tipe']; ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -386,7 +386,7 @@
             <th scope="col">id</th>
             <th scope="col">nomormeja</th>
             <th scope="col">namamenu</th>
-            <th scope="col">namastaff</th>
+            <th scope="col">namauser</th>
             <th scope="col">Harga</th>
             <th scope="col">quantity</th>
             <th scope="col">total</th>
@@ -399,7 +399,7 @@
             <td><?= $order['id']; ?></td>
             <td><?= $order['nomormeja']; ?></td>
             <td><?= $order['namamenu']; ?></td>
-            <th><?= $order['namastaff']; ?></th>
+            <th><?= $order['namauser']; ?></th>
             <td><?= $order['Harga']; ?></td>
             <td><?= $order['quantity']; ?></td>
             <td><?= $order['total']; ?></td>

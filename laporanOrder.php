@@ -17,15 +17,15 @@
 	order_list.id_order_list AS id,
 	meja.id_meja AS nomormeja,
 	menu.nama AS namamenu,
-	staff.nama AS namastaff,
+	user.nama AS namauser,
 	menu.harga AS Harga,
 	order_list.quantity AS quantity,
 	order_list.total AS total
 	FROM
 	order_list JOIN meja 
 		ON order_list.id_meja = meja.id_meja
-	JOIN staff 
-		ON order_list.id_staff = staff .id_staff
+	JOIN user 
+		ON order_list.id_user = user.id_user
 	JOIN menu 
 		ON order_list.id_menu = menu.id_menu
 
@@ -38,7 +38,7 @@
             <th>id</th>
             <th>nomormeja</th>
             <th>namamenu</th>
-            <th>namastaff</th>
+            <th>namauser</th>
             <th>Harga</th>
             <th>quantity</th>
             <th>total</th>	 	
@@ -50,7 +50,7 @@
             <td><?= $order['id']; ?></td>
             <td><?= $order['nomormeja']; ?></td>
             <td><?= $order['namamenu']; ?></td>
-            <th><?= $order['namastaff']; ?></th>
+            <th><?= $order['namauser']; ?></th>
             <td><?= $order['Harga']; ?></td>
             <td><?= $order['quantity']; ?></td>
             <td><?= $order['total']; ?></td>
