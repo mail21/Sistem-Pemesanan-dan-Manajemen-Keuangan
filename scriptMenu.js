@@ -2,10 +2,20 @@ $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
   });
+
+    
+
   
   let menuRows = document.querySelectorAll(".menu");
   for (const menuRow of menuRows) {
+    
+      
        menuRow.addEventListener("click",async (e)=>{
+        if(tipe === "Koki" || tipe === "Pelanggan" ){
+            alert("Hanya bisa melihat");
+            window.location = 'menu.php';
+            document.querySelector('.modal').hidden = true;
+        }
           const modalBody = document.querySelector('.modal-body');
           // =========================== get menu =======================
           let targetParent = e.target.parentElement
@@ -85,6 +95,7 @@ $("#menu-toggle").click(function(e) {
                    }
               }
           })
-
-       })
-} 
+        
+       }) 
+    
+}

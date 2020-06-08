@@ -2,6 +2,12 @@
 	include "koneksi.php";
 	include "functions.php";
 	require 'cek-sesi.php';
+
+	if($_SESSION['tipe'] === "Admin" ){
+    	header("location:menuLaporan.php");
+	}else if($_SESSION['tipe'] === "Koki"){
+		header("location:index.php");
+	}
 	$boxMeja = query("SELECT * FROM reservasi JOIN meja ON reservasi.id_reservasi = meja.id_reservasi");
 	$boxMenu = query("SELECT * FROM menu");
 
@@ -18,6 +24,7 @@
 		$strMeja .= "{'id_meja':'$id_meja','nama_pelanggan':'$nama_pelanggan','id_reservasi':$id_reservasi,'status':'$status'}";
 		$b++;	
 	}
+	$session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
  ?>
 
 <!DOCTYPE html>
@@ -30,7 +37,9 @@
   <link rel="stylesheet" href="assets/styles/style.css">
   <link rel="stylesheet" href="assets/styles/sidebar.css">
 </head>
-
+<script type="text/javascript">
+    var tipe='<?php echo $session_value;?>';
+</script>
 <style>	
 	.menu{
 		display: flex;
@@ -88,13 +97,13 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , <?= $_SESSION['nama'] ?>  </div>
+      <div class="sidebar-heading">Welcome ,<?= $_SESSION['tipe'] ?> <?= $_SESSION['nama'] ?>  </div>
       <div class="list-group list-group-flush">
-	  	<a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
-        <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
-        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a> 
-        <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>  
-	</div>
+	  	<a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
+        <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
+        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
+        <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
+	  </div>
     </div>
 	<!-- /#sidebar-wrapper -->
 	
@@ -154,4 +163,17 @@
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptMenu.js"></script>
+<script>
+  if(tipe === "Pelanggan"){
+	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }else if(tipe === "Pelayan"){
+	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }
+
+  document.addEventListener("click", (e)=>{
+	if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan")){
+		alert("Anda Tidak mempunyai Akses");
+	}
+  });
+</script>
 </html>

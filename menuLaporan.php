@@ -2,7 +2,10 @@
 	include "koneksi.php";
   include "functions.php";
 	require 'cek-sesi.php';
-  
+  if($_SESSION['tipe'] === "Pelayan" || $_SESSION['tipe'] === "Pelanggan" ||$_SESSION['tipe'] === "Koki"){
+		session_destroy();
+    	header("location:login.php");
+	}
 	$boxStaff = query("SELECT * FROM staff");
 	$orderListQuery = query("SELECT 
 	order_list.no_transaksi AS nomortransaksi,
@@ -35,6 +38,7 @@
     $pengeluaran = query("SELECT jumlah FROM pengeluaran WHERE tgl_pengeluaran = '2020-05-20 15:51:32' ");
     $totalBiayaPengeluaran = query("SELECT SUM(jumlah) AS total FROM pengeluaran WHERE tgl_pengeluaran = '2020-05-20 15:51:32'");
     $laba =(int)$totalPendapatan[0]['total'] - (int)$totalBiayaPengeluaran[0]['total'];
+    $session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
 	
  ?>
 
@@ -48,7 +52,9 @@
   <link rel="stylesheet" href="assets/styles/style.css">
   <link rel="stylesheet" href="assets/styles/sidebar.css">
 </head>
-
+<script type="text/javascript">
+    var tipe='<?php echo $session_value;?>';
+</script>
 <style>	
 	.kotak{
     background: lightgreen;
@@ -64,13 +70,13 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , <?= $_SESSION['nama'] ?> </div>
+      <div class="sidebar-heading">Welcome ,<?= $_SESSION['tipe'] ?> <?= $_SESSION['nama'] ?> </div>
       <div class="list-group list-group-flush">
-	  	<a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
-        <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
-        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a> 
+      <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
+        <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
+        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
         <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
-      </div>
+	  </div>
     </div>
 	<!-- /#sidebar-wrapper -->
 	
@@ -434,6 +440,14 @@
 		containerForm.toggleAttribute('hidden');
 	})
 		
-		
+
+  document.addEventListener("click", (e)=>{
+	if(e.target.classList.contains("linkPesan")){
+		alert("Anda Tidak mempunyai Akses");
+  } else if(e.target.classList.contains("linkHome")){
+		alert("Anda Tidak mempunyai Akses");
+  }
+  
+  });
 	</script>
 </html>

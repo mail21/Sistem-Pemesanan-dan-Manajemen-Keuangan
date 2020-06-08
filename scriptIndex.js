@@ -3,6 +3,10 @@ $("#menu-toggle").click(function(e) {
     $("#wrapper").toggleClass("toggled");
   });
 
+  console.log(tipe);
+
+  
+
   const btnDenah = document.querySelector('.btnDenah');
   const  btnOrderList = document.querySelector('.btnOrderList');
   const containerDenah = document.querySelector('.containerDenah');
@@ -36,12 +40,15 @@ $("#menu-toggle").click(function(e) {
 
   const containerOrderList = document.querySelector('.containerOrderList');
   const containerLegenda = document.querySelector(".legenda");
+  
+
   btnDenah.addEventListener("click", ()=>{
       containerDenah.toggleAttribute('hidden');
       containerOrderList.toggleAttribute('hidden');
       containerLegenda.toggleAttribute('hidden');
 
   });
+
   btnOrderList.addEventListener("click", ()=>{
       containerDenah.toggleAttribute('hidden');
       containerOrderList.toggleAttribute('hidden');
@@ -83,6 +90,11 @@ $("#menu-toggle").click(function(e) {
                   document.querySelector(".formReservasi").toggleAttribute('hidden');
               })
           }else if(statusMeja == "aktif"){
+            if(tipe === "Pelanggan" ){
+                alert("Anda Tidak Mempunyai Akses");
+                window.location = 'index.php';
+                document.querySelector('.modal').hidden = true;
+            }
               document.querySelector('.modal-dialog').classList.add('modal-lg');
               let data = await row.dataset.menu;
               console.log(id_meja)
@@ -130,6 +142,11 @@ $("#menu-toggle").click(function(e) {
                   }
               })
           }else if(statusMeja == "reservasi"){
+            if(tipe === "Pelanggan" ){
+                alert("Anda Tidak Mempunyai Akses");
+                window.location = 'index.php';
+                document.querySelector('.modal').hidden = true;
+            }
               let nama_pelanggan = await row.dataset.pelanggan;
               modalTitle.textContent = `Meja ${id_meja}`;
               let	isi =`

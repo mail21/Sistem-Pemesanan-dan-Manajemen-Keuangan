@@ -1,9 +1,11 @@
-
 <?php 
 	
 	include "koneksi.php";
 	include "functions.php";
 	require 'cek-sesi.php';
+	if($_SESSION['tipe'] === "Admin" ){
+    	header("location:menuLaporan.php");
+	}
 	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi");
 	$orderListQuery = query("SELECT 
 	meja.id_meja AS nomormeja,
@@ -24,8 +26,11 @@
 		
 	WHERE meja.status = 'aktif' AND order_list.no_transaksi = '0000000'
 	ORDER BY order_list.id_order_list DESC");
-
+	$session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
  ?>
+ <script type="text/javascript">
+    var tipe='<?php echo $session_value;?>';
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,13 +47,12 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , <?= $_SESSION['nama'] ?> </div>
+      <div class="sidebar-heading">Welcome , <?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
       <div class="list-group list-group-flush">
-        <a href="index.php" class="list-group-item list-group-item-action bg-light">Home</a>
-        <a href="menu.php" class="list-group-item list-group-item-action bg-light">Pesan</a>
-        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light">Laporan</a>
+        <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
+        <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
+        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
         <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
-      
 	  </div>
     </div>
 	<!-- /#sidebar-wrapper -->
@@ -57,16 +61,17 @@
     <div id="page-content-wrapper">
 
 		<div class="container-fluid banner"></div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-info" id="menu-toggle">Toggle Menu</button>
-
-		<button type="button" class="btn btn-info btnDenah ml-2" aria-pressed="false" autocomplete="off">
-			Denah
-		</button>
-		<button type="button" class="btn btn-info btnOrderList ml-2" aria-pressed="false" autocomplete="off">
-			Order List 
-		</button>
-      </nav>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+			<button class="btn btn-info" id="menu-toggle">Toggle Menu</button>
+			
+			<button type="button" class="btn btn-info btnDenah ml-2" aria-pressed="false" autocomplete="off">
+				Denah
+			</button>
+			<button type="button" class="btn btn-info btnOrderList ml-2" aria-pressed="false" autocomplete="off">
+				Order List 
+			</button>
+		</nav>
+		
 		<!-- =============================== Denah ================================== -->
 		<div class="container-fluid mt-3">
 			<div class="legenda">
@@ -95,14 +100,14 @@
 			</div>
 			<br>
 			<div class="containerDenah">
-				<div class="atas"></div>
-				<div class="kiri"></div>
-				<div class="bawah"></div>
-				<div class="kanan"></div>
-				<div class="tengah"></div>
-				<div class="tengah"></div>
-				<div class="tengah"></div>
-				<div class="tengah"></div>
+				<div class="atas" style="border-bottom: 1px solid; padding:10px;"></div>
+				<div class="kiri" style="border: 1px solid; padding:10px;"></div>
+				<div class="bawah" style="border-top: 1px solid; padding:10px;"></div>
+				<div class="kanan" style="border: 1px solid; padding:10px;"></div>
+				<div class="tengah" style="border: 1px solid; padding:10px;"></div>
+				<div class="tengah" style="border: 1px solid; padding:10px;"></div>
+				<div class="tengah" style="border: 1px solid; padding:10px;"></div>
+				<div class="tengah" style="border: 1px solid; padding:10px;"></div>
 				<?php 
 					foreach ($mejaQuery as $meja) {
 						$status = $meja['status'];
@@ -203,9 +208,35 @@
 	</div>
 	<!-- Modal Pesanan Aktif -->
 </div>
+
 </body>	
 
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptindex.js"></script>
+<script>
+if(tipe === "Koki" ){
+    btnDenah.disabled = true;
+    btnOrderList.disabled = true;
+    containerDenah.hidden = true;
+    containerLegenda.hidden = true;
+	containerOrderList.hidden = false;
+	document.querySelector(".linkLaporan").setAttribute("href", "#");
+	document.querySelector(".linkPesan").setAttribute("href", "#");
+  }else if(tipe === "Pelanggan"){
+    btnDenah.disabled = true;
+	btnOrderList.disabled = true;
+	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }else if(tipe === "Pelayan"){
+	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }
+
+  document.addEventListener("click", (e)=>{
+	if(e.target.classList.contains("linkPesan") && tipe === "Koki"){
+		alert("Anda Tidak mempunyai Akses");
+	}else if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan")){
+		alert("Anda Tidak mempunyai Akses");
+	}
+  });
+</script>
 </html>
