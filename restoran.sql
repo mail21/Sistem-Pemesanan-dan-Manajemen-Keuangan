@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 30, 2020 at 05:19 AM
+-- Generation Time: Jun 08, 2020 at 03:13 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `meja` (
   `id_meja` int(11) NOT NULL,
-  `id_staff` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `id_reservasi` int(11) NOT NULL,
   `status` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -38,12 +38,12 @@ CREATE TABLE `meja` (
 -- Dumping data for table `meja`
 --
 
-INSERT INTO `meja` (`id_meja`, `id_staff`, `id_reservasi`, `status`) VALUES
+INSERT INTO `meja` (`id_meja`, `id_user`, `id_reservasi`, `status`) VALUES
 (1, 1, 1, 'kosong'),
 (2, 1, 1, 'kosong'),
-(3, 1, 8, 'reservasi'),
+(3, 1, 1, 'kosong'),
 (4, 1, 1, 'kosong'),
-(5, 1, 1, 'kosong'),
+(5, 3, 1, 'aktif'),
 (6, 1, 1, 'kosong'),
 (7, 1, 1, 'kosong'),
 (8, 1, 1, 'kosong'),
@@ -140,7 +140,7 @@ CREATE TABLE `order_list` (
   `no_transaksi` varchar(99) NOT NULL,
   `id_meja` int(11) NOT NULL,
   `id_menu` int(11) NOT NULL,
-  `id_staff` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `harga` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `total` int(11) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE `order_list` (
 -- Dumping data for table `order_list`
 --
 
-INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`, `id_staff`, `harga`, `quantity`, `total`, `ket`) VALUES
+INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`, `id_user`, `harga`, `quantity`, `total`, `ket`) VALUES
 (1, '2020051', 1, 1, 1, 20000, 2, 40000, 'Pesan Ayam'),
 (2, '2020051', 1, 1, 1, 20000, 1, 20000, 'Ayam Lagi'),
 (3, '2020052', 9, 2, 1, 15000, 3, 45000, 'Beli nasi goreng'),
@@ -165,7 +165,8 @@ INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`,
 (11, '2020058', 2, 2, 1, 15000, 2, 30000, 'Jangan terlalu pedas, dan tidak buah buahan'),
 (12, '2020058', 2, 3, 1, 30000, 1, 30000, 'Soto nya jangan terlalu pedas'),
 (13, '2020059', 1, 1, 1, 20000, 4, 80000, ''),
-(14, '2020059', 1, 4, 1, 25000, 1, 25000, '');
+(14, '2020059', 1, 4, 1, 25000, 1, 25000, ''),
+(15, '0000000', 5, 1, 3, 20000, 2, 40000, '');
 
 -- --------------------------------------------------------
 
@@ -196,7 +197,13 @@ INSERT INTO `pengeluaran` (`id_pengeluaran`, `id_sumber`, `tgl_pengeluaran`, `ju
 (9, 4, '2020-05-20 15:51:32', 50000),
 (10, 5, '2020-05-20 15:51:32', 70000),
 (11, 6, '2020-05-20 15:51:32', 1000),
-(12, 7, '2020-05-20 15:51:32', 30000);
+(12, 7, '2020-05-20 15:51:32', 30000),
+(13, 2, '2020-06-08 16:20:07', 25000),
+(14, 3, '2020-06-08 16:20:07', 30000),
+(15, 4, '2020-06-08 16:20:07', 50000),
+(16, 5, '2020-06-08 16:20:07', 30000),
+(17, 6, '2020-06-08 16:20:07', 10000),
+(18, 7, '2020-06-08 16:20:07', 40000);
 
 -- --------------------------------------------------------
 
@@ -206,7 +213,7 @@ INSERT INTO `pengeluaran` (`id_pengeluaran`, `id_sumber`, `tgl_pengeluaran`, `ju
 
 CREATE TABLE `reservasi` (
   `id_reservasi` int(11) NOT NULL,
-  `id_staff` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `tanggal_reservasi` date NOT NULL,
   `jam` varchar(10) NOT NULL,
   `nama_pelanggan` varchar(50) NOT NULL,
@@ -217,7 +224,7 @@ CREATE TABLE `reservasi` (
 -- Dumping data for table `reservasi`
 --
 
-INSERT INTO `reservasi` (`id_reservasi`, `id_staff`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`) VALUES
+INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`) VALUES
 (1, 1, '0000-00-00', '', 'kosong', ''),
 (2, 1, '2020-05-13', '18:00', 'Rama', ''),
 (3, 1, '2020-05-16', '12:12', 'Ismail', '123123'),
@@ -226,31 +233,6 @@ INSERT INTO `reservasi` (`id_reservasi`, `id_staff`, `tanggal_reservasi`, `jam`,
 (6, 2, '2020-05-21', '12:12', 'Olaf', '0900'),
 (7, 1, '2020-05-23', '12:12', 'Opa', '123'),
 (8, 1, '2020-05-25', '12:00', 'Haki', '0876854666');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `staff`
---
-
-CREATE TABLE `staff` (
-  `id_staff` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(99) NOT NULL,
-  `nama` varchar(50) NOT NULL,
-  `tipe` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `staff`
---
-
-INSERT INTO `staff` (`id_staff`, `username`, `password`, `nama`, `tipe`) VALUES
-(1, 'ismail', '123', 'Ismail', 'Koki'),
-(2, 'admin', '123', 'Admin', 'Admin'),
-(3, 'rama', '123', 'Rama Cahya', 'Pelayan'),
-(4, 'Kiki', '123', 'Rizky Pramata', 'Koki'),
-(5, 'cahya', '123', 'Cahya Seta', 'Pelayan');
 
 -- --------------------------------------------------------
 
@@ -276,6 +258,33 @@ INSERT INTO `sumber` (`id_sumber`, `nama`) VALUES
 (6, 'Beban Tidak Terduga'),
 (7, 'Beban Tagihan Listrik');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id_user` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(99) NOT NULL,
+  `nama` varchar(50) NOT NULL,
+  `email` varchar(99) NOT NULL,
+  `tipe` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `username`, `password`, `nama`, `email`, `tipe`) VALUES
+(1, 'ismail', '123', 'Ismail', '', 'Koki'),
+(2, 'admin', '123', 'Admin', '', 'Admin'),
+(3, 'rama', '123', 'Rama Cahya', '', 'Pelayan'),
+(4, 'Kiki', '123', 'Rizky Pramata', '', 'Koki'),
+(5, 'cahya', '123', 'Cahya Seta', '', 'Pelanggan'),
+(6, 'lukas', '213', 'Lukasiho', 'Lukasiho@yahoo.com', 'Pelanggan');
+
 --
 -- Indexes for dumped tables
 --
@@ -286,7 +295,7 @@ INSERT INTO `sumber` (`id_sumber`, `nama`) VALUES
 ALTER TABLE `meja`
   ADD PRIMARY KEY (`id_meja`),
   ADD KEY `id_reservasi` (`id_reservasi`),
-  ADD KEY `id_staff` (`id_staff`);
+  ADD KEY `id_staff` (`id_user`);
 
 --
 -- Indexes for table `menu`
@@ -307,7 +316,7 @@ ALTER TABLE `order_list`
   ADD PRIMARY KEY (`id_order_list`),
   ADD KEY `id_meja` (`id_meja`),
   ADD KEY `id_menu` (`id_menu`),
-  ADD KEY `id_staff` (`id_staff`);
+  ADD KEY `id_staff` (`id_user`);
 
 --
 -- Indexes for table `pengeluaran`
@@ -321,19 +330,19 @@ ALTER TABLE `pengeluaran`
 --
 ALTER TABLE `reservasi`
   ADD PRIMARY KEY (`id_reservasi`),
-  ADD KEY `id_staff` (`id_staff`);
-
---
--- Indexes for table `staff`
---
-ALTER TABLE `staff`
-  ADD PRIMARY KEY (`id_staff`);
+  ADD KEY `id_staff` (`id_user`);
 
 --
 -- Indexes for table `sumber`
 --
 ALTER TABLE `sumber`
   ADD PRIMARY KEY (`id_sumber`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id_user`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -355,13 +364,13 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `order_list`
 --
 ALTER TABLE `order_list`
-  MODIFY `id_order_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_order_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
 --
 ALTER TABLE `pengeluaran`
-  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_pengeluaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reservasi`
@@ -370,10 +379,10 @@ ALTER TABLE `reservasi`
   MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `staff`
+-- AUTO_INCREMENT for table `user`
 --
-ALTER TABLE `staff`
-  MODIFY `id_staff` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+ALTER TABLE `user`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
