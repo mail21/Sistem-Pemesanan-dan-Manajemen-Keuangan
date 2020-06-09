@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2020 at 03:13 PM
+-- Generation Time: Jun 09, 2020 at 03:57 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -43,7 +43,7 @@ INSERT INTO `meja` (`id_meja`, `id_user`, `id_reservasi`, `status`) VALUES
 (2, 1, 1, 'kosong'),
 (3, 1, 1, 'kosong'),
 (4, 1, 1, 'kosong'),
-(5, 3, 1, 'aktif'),
+(5, 3, 1, 'kosong'),
 (6, 1, 1, 'kosong'),
 (7, 1, 1, 'kosong'),
 (8, 1, 1, 'kosong'),
@@ -127,7 +127,8 @@ INSERT INTO `order_detail` (`no_transaksi`, `id_sumber`, `tanggal`, `total`, `ke
 ('2020056', 1, '2020-05-23 13:01:59', 20000, 10000),
 ('2020057', 1, '2020-05-25 17:06:39', 40000, 0),
 ('2020058', 1, '2020-05-25 21:08:07', 60000, 0),
-('2020059', 1, '2020-05-25 21:10:57', 105000, 15000);
+('2020059', 1, '2020-05-25 21:10:57', 105000, 15000),
+('20200610', 1, '2020-06-09 19:31:12', 40000, 83123);
 
 -- --------------------------------------------------------
 
@@ -166,7 +167,7 @@ INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`,
 (12, '2020058', 2, 3, 1, 30000, 1, 30000, 'Soto nya jangan terlalu pedas'),
 (13, '2020059', 1, 1, 1, 20000, 4, 80000, ''),
 (14, '2020059', 1, 4, 1, 25000, 1, 25000, ''),
-(15, '0000000', 5, 1, 3, 20000, 2, 40000, '');
+(15, '20200610', 5, 1, 3, 20000, 2, 40000, '');
 
 -- --------------------------------------------------------
 
@@ -278,7 +279,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `nama`, `email`, `tipe`) VALUES
-(1, 'ismail', '123', 'Ismail', '', 'Koki'),
+(1, 'ismail', '123', 'Ismail', '', 'Kasir'),
 (2, 'admin', '123', 'Admin', '', 'Admin'),
 (3, 'rama', '123', 'Rama Cahya', '', 'Pelayan'),
 (4, 'Kiki', '123', 'Rizky Pramata', '', 'Koki'),
@@ -382,7 +383,7 @@ ALTER TABLE `reservasi`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables
