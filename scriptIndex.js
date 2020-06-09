@@ -135,7 +135,12 @@ $("#menu-toggle").click(function(e) {
               modalBody.innerHTML = isi;
               const inputUang = document.querySelector("#inputUang");
               inputUang.addEventListener("input",(e)=>{
-                  if(inputUang.value >= totalOrder){
+                  if(tipe != "Kasir"){
+                      alert("Anda tidak mempunyai akses");
+                      inputUang.value = "";
+                      document.querySelector('#btnKonfirmasi').disabled = true;
+                  }
+                  if(inputUang.value >= totalOrder && tipe === "Kasir"){
                       document.querySelector('#btnKonfirmasi').disabled = false;
                   }else{
                       document.querySelector('#btnKonfirmasi').disabled = true;
