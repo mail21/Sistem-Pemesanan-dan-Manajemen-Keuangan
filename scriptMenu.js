@@ -11,7 +11,7 @@ $("#menu-toggle").click(function(e) {
     
       
        menuRow.addEventListener("click",async (e)=>{
-        if(tipe === "Pelanggan" || tipe === "Kasir"){
+        if(tipe === "Pelanggan" || tipe === "Kasir" || tipe === "Admin" ){
             alert("Hanya bisa melihat");
             window.location = 'menu.php';
             document.querySelector('.modal').hidden = true;

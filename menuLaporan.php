@@ -441,13 +441,13 @@
 	})
 		
 
-  document.addEventListener("click", (e)=>{
-	if(e.target.classList.contains("linkPesan")){
-		alert("Anda Tidak mempunyai Akses");
-  } else if(e.target.classList.contains("linkHome")){
-		alert("Anda Tidak mempunyai Akses");
-  }
+  // document.addEventListener("click", (e)=>{
+	// if(e.target.classList.contains("linkPesan")){
+	// 	alert("Anda Tidak mempunyai Akses");
+  // } else if(e.target.classList.contains("linkHome")){
+	// 	alert("Anda Tidak mempunyai Akses");
+  // }
   
-  });
+  // });
 	</script>
 </html>

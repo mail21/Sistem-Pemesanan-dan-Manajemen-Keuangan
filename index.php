@@ -3,9 +3,7 @@
 	include "koneksi.php";
 	include "functions.php";
 	require 'cek-sesi.php';
-	if($_SESSION['tipe'] === "Admin" ){
-    	header("location:menuLaporan.php");
-	}
+	
 	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi");
 	$orderListQuery = query("SELECT 
 	meja.id_meja AS nomormeja,
@@ -231,6 +229,12 @@ if(tipe === "Koki" ){
 	document.querySelector(".linkLaporan").setAttribute("href", "");
   }else if(tipe === "Kasir"){
 	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }else if(tipe === "Admin" ){
+    btnDenah.disabled = true;
+    btnOrderList.disabled = true;
+    containerDenah.hidden = true;
+    containerLegenda.hidden = true;
+	containerOrderList.hidden = false;
   }
 
   document.addEventListener("click", (e)=>{

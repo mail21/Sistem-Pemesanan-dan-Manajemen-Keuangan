@@ -3,9 +3,7 @@
 	include "functions.php";
 	require 'cek-sesi.php';
 
-	if($_SESSION['tipe'] === "Admin" ){
-    	header("location:menuLaporan.php");
-	}else if($_SESSION['tipe'] === "Koki"){
+	if($_SESSION['tipe'] === "Koki"){
 		header("location:index.php");
 	}
 	$boxMeja = query("SELECT * FROM reservasi JOIN meja ON reservasi.id_reservasi = meja.id_reservasi");
