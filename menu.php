@@ -168,10 +168,12 @@
 	document.querySelector(".linkLaporan").setAttribute("href", "");
   }else if(tipe === "Pelayan"){
 	document.querySelector(".linkLaporan").setAttribute("href", "");
+  }else if(tipe === "Kasir"){
+	document.querySelector(".linkLaporan").setAttribute("href", "");
   }
 
   document.addEventListener("click", (e)=>{
-	if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan")){
+	if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan"|| tipe === "Kasir")){
 		alert("Anda Tidak mempunyai Akses");
 	}
   });

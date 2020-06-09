@@ -2,7 +2,7 @@
 	include "koneksi.php";
   include "functions.php";
 	require 'cek-sesi.php';
-  if($_SESSION['tipe'] === "Pelayan" || $_SESSION['tipe'] === "Pelanggan" ||$_SESSION['tipe'] === "Koki"){
+  if($_SESSION['tipe'] === "Pelayan" || $_SESSION['tipe'] === "Pelanggan" ||$_SESSION['tipe'] === "Koki" ||$_SESSION['tipe'] === "Kasir"){
 		session_destroy();
     	header("location:login.php");
 	}
