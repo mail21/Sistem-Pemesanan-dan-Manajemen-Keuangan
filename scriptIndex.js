@@ -145,7 +145,7 @@ $("#menu-toggle").click(function(e) {
                   }else{
                       document.querySelector('#btnKonfirmasi').disabled = true;
                   }
-              })
+              });
           }else if(statusMeja == "reservasi"){
             if(tipe === "Pelanggan" ){
                 alert("Anda Tidak Mempunyai Akses");
