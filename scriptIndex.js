@@ -135,7 +135,7 @@ $("#menu-toggle").click(function(e) {
               modalBody.innerHTML = isi;
               const inputUang = document.querySelector("#inputUang");
               inputUang.addEventListener("input",(e)=>{
-                  if(tipe != "Kasir"){
+                  if(tipe === "Koki" || tipe === "Pelayan"){
                       alert("Anda tidak mempunyai akses");
                       inputUang.value = "";
                       document.querySelector('#btnKonfirmasi').disabled = true;
