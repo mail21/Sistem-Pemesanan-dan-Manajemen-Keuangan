@@ -50,7 +50,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit" name="submit" class="btn btn-info btn-md">Submit</button>
-                                <a href="daftarMember.php"><button type="button" name="daftar" class="btn btn-info btn-md">Daftar Member</button></a>                            
+                                <a href="daftarMember.php?pesan="><button type="button" name="daftar" class="btn btn-info btn-md">Daftar Member</button></a>                            
                             </div>
                             
                         </form>

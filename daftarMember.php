@@ -1,5 +1,7 @@
 <?php 
 
+    $_GET['pesan'] = !empty($_GET['pesan']) && is_string($_GET['pesan']) ? $_GET['pesan'] : '';
+
     if($_GET["pesan"] === "passwordtidaksesuai"){
         echo "<script>
 				alert('konfirmasi password tidak sesuai!');
@@ -9,6 +11,7 @@
             alert('username sudah terdaftar!')
           </script>";
     }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,23 +60,23 @@
                             <h3 class="text-center text-info">Daftar</h3>
                             <div class="form-group">
                                 <label for="username" class="text-info">Username:</label><br>
-                                <input type="text" name="username" id="username" class="form-control">
+                                <input type="text" name="username" id="username" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="nama" class="text-info">Nama:</label><br>
-                                <input type="text" name="nama" id="nama" class="form-control">
+                                <input type="text"  name="nama" id="nama" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="text-info">Email:</label><br>
-                                <input type="email" name="email" id="email" class="form-control">
+                                <input type="email" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text-info">Password:</label><br>
-                                <input type="password" name="password" id="password" class="form-control">
+                                <input type="password" name="password" id="password" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="kpassword" class="text-info"> Konfirmasi Password:</label><br>
-                                <input type="password" name="kpassword" id="kpassword" class="form-control">
+                                <input type="password"  name="kpassword" id="kpassword" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <button type="submit" name="submit" class="btn btn-info btn-md">Submit</button>
