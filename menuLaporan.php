@@ -75,8 +75,11 @@
       <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
         <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
-        <a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
-	  </div>
+		<?php if($session_value === "Admin"): ?>
+			<a href="halamanStaff.php" class="list-group-item list-group-item-action bg-light linkLaporan">Staff</a>
+		<?php endif; ?>  
+		<a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
+	 </div>
     </div>
 	<!-- /#sidebar-wrapper -->
 	

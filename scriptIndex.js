@@ -65,6 +65,7 @@ $("#menu-toggle").click(function(e) {
           let id_meja = await row.dataset.id;
           let statusMeja = await row.dataset.status;
           if (statusMeja == "kosong") {
+            
               let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
@@ -87,7 +88,13 @@ $("#menu-toggle").click(function(e) {
               modalTitle.textContent = `Meja ${id_meja}`;
               let reservasiToggle = document.querySelector(".reservasiToggle")
               reservasiToggle.addEventListener('click', function(){
+                if(tipe === "Kasir" || tipe === "Pelanggan" ){
                   document.querySelector(".formReservasi").toggleAttribute('hidden');
+                }else{
+                    alert("Anda Tidak Mempunyai Akses");
+                    window.location = 'index.php';
+                    document.querySelector('.modal').hidden = true;
+                }
               })
           }else if(statusMeja == "aktif"){
             if(tipe === "Pelanggan" ){
