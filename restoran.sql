@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2020 at 03:57 PM
+-- Generation Time: Jun 10, 2020 at 02:38 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -39,8 +39,8 @@ CREATE TABLE `meja` (
 --
 
 INSERT INTO `meja` (`id_meja`, `id_user`, `id_reservasi`, `status`) VALUES
-(1, 1, 1, 'kosong'),
-(2, 1, 1, 'kosong'),
+(1, 3, 1, 'kosong'),
+(2, 3, 1, 'kosong'),
 (3, 1, 1, 'kosong'),
 (4, 1, 1, 'kosong'),
 (5, 3, 1, 'kosong'),
@@ -128,7 +128,13 @@ INSERT INTO `order_detail` (`no_transaksi`, `id_sumber`, `tanggal`, `total`, `ke
 ('2020057', 1, '2020-05-25 17:06:39', 40000, 0),
 ('2020058', 1, '2020-05-25 21:08:07', 60000, 0),
 ('2020059', 1, '2020-05-25 21:10:57', 105000, 15000),
-('20200610', 1, '2020-06-09 19:31:12', 40000, 83123);
+('20200610', 1, '2020-06-09 19:31:12', 40000, 83123),
+('20200611', 1, '2020-06-09 21:11:57', 20000, 10000),
+('20200612', 1, '2020-06-09 21:12:53', 40000, 10000),
+('20200613', 1, '2020-06-09 21:21:16', 20000, 12293123),
+('20200614', 1, '2020-06-09 21:24:18', 20000, 91111),
+('20200615', 1, '2020-06-10 19:36:26', 20000, 10000),
+('20200616', 1, '2020-06-10 19:36:34', 50000, 50000);
 
 -- --------------------------------------------------------
 
@@ -167,7 +173,13 @@ INSERT INTO `order_list` (`id_order_list`, `no_transaksi`, `id_meja`, `id_menu`,
 (12, '2020058', 2, 3, 1, 30000, 1, 30000, 'Soto nya jangan terlalu pedas'),
 (13, '2020059', 1, 1, 1, 20000, 4, 80000, ''),
 (14, '2020059', 1, 4, 1, 25000, 1, 25000, ''),
-(15, '20200610', 5, 1, 3, 20000, 2, 40000, '');
+(15, '20200610', 5, 1, 3, 20000, 2, 40000, ''),
+(16, '20200611', 1, 1, 3, 20000, 1, 20000, 'asd'),
+(17, '20200612', 1, 1, 3, 20000, 2, 40000, 'a'),
+(18, '20200613', 1, 1, 3, 20000, 1, 20000, 'a'),
+(19, '20200614', 1, 1, 3, 20000, 1, 20000, ''),
+(20, '20200615', 1, 1, 3, 20000, 1, 20000, ''),
+(21, '20200616', 2, 4, 3, 25000, 2, 50000, 'asd');
 
 -- --------------------------------------------------------
 
@@ -284,7 +296,9 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `nama`, `email`, `tipe`) 
 (3, 'rama', '123', 'Rama Cahya', '', 'Pelayan'),
 (4, 'Kiki', '123', 'Rizky Pramata', '', 'Koki'),
 (5, 'cahya', '123', 'Cahya Seta', '', 'Pelanggan'),
-(6, 'lukas', '213', 'Lukasiho', 'Lukasiho@yahoo.com', 'Pelanggan');
+(6, 'lukas', '213', 'Lukasiho', 'Lukasiho@yahoo.com', 'Pelanggan'),
+(17, 'kujang', '123', 'Kujang', 'kujang@gmail.com', 'Koki'),
+(18, 'ratih', '123', 'Ratih', 'ratih@mail.com', 'Kasir');
 
 --
 -- Indexes for dumped tables
@@ -365,7 +379,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `order_list`
 --
 ALTER TABLE `order_list`
-  MODIFY `id_order_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_order_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `pengeluaran`
@@ -383,7 +397,7 @@ ALTER TABLE `reservasi`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
