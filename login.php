@@ -39,7 +39,7 @@
 						</button>
 					</div>
 
-					<div class="flex-col-c p-t-170 p-b-40">
+					<div class="flex-col-c p-t-120 p-b-40">
 						<span class="txt1 p-b-9">
 							Don’t have an account?
 						</span>
