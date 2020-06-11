@@ -45,12 +45,12 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , <?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
+      <div class="sidebar-heading">Welcome , <br>	<?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
       <div class="list-group list-group-flush">
         <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
-        <a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
 		<?php if($session_value === "Admin"): ?>
+			<a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
 			<a href="halamanStaff.php" class="list-group-item list-group-item-action bg-light linkLaporan">Staff</a>
 		<?php endif; ?>  
 		<a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
@@ -218,35 +218,28 @@
 <script src="scriptindex.js"></script>
 <script>
 if(tipe === "Koki" ){
-    btnDenah.disabled = true;
-    btnOrderList.disabled = true;
+    btnDenah.hidden = true;
+    btnOrderList.hidden = true;
     containerDenah.hidden = true;
     containerLegenda.hidden = true;
 	containerOrderList.hidden = false;
 	document.querySelector(".linkLaporan").setAttribute("href", "#");
 	document.querySelector(".linkPesan").setAttribute("href", "#");
   }else if(tipe === "Pelanggan"){
-    btnDenah.disabled = true;
-	btnOrderList.disabled = true;
+    btnDenah.hidden = true;
+	btnOrderList.hidden = true;
 	document.querySelector(".linkLaporan").setAttribute("href", "");
   }else if(tipe === "Pelayan"){
 	document.querySelector(".linkLaporan").setAttribute("href", "");
   }else if(tipe === "Kasir"){
 	document.querySelector(".linkLaporan").setAttribute("href", "");
   }else if(tipe === "Admin" ){
-    btnDenah.disabled = true;
-    btnOrderList.disabled = true;
+    btnDenah.hidden = true;
+    btnOrderList.hidden = true;
     containerDenah.hidden = true;
     containerLegenda.hidden = true;
 	containerOrderList.hidden = false;
   }
 
-  document.addEventListener("click", (e)=>{
-	if(e.target.classList.contains("linkPesan") && tipe === "Koki"){
-		alert("Anda Tidak mempunyai Akses");
-	}else if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan"|| tipe === "Kasir")){
-		alert("Anda Tidak mempunyai Akses");
-	}
-  });
 </script>
 </html>
