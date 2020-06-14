@@ -29,9 +29,13 @@
 	$session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
 	$session_nama = (isset($_SESSION['nama']))? $_SESSION['nama']:'';
 	$session_email = (isset($_SESSION['email']))? $_SESSION['email']:'';
-	if($_SESSION['tipe'] != "Koki"){
-		$userQuery = query("select jam from reservasi WHERE reservasi.id_user = '".$_SESSION['id_user']."' AND reservasi.tanggal_reservasi = DATE(NOW()) ");
-		$jamreservasiandaPHP = substr($userQuery[0]['jam'],0,2);
+	if($_SESSION['tipe'] == "Pelanggan"){
+		$userQuery = mysqli_query($db,"select jam from reservasi WHERE reservasi.id_user = '".$_SESSION['id_user']."' AND reservasi.tanggal_reservasi = DATE(NOW()) ");
+	
+		if(mysqli_num_rows($userQuery) != 0){
+			$userQuery = query("select jam from reservasi WHERE reservasi.id_user = '".$_SESSION['id_user']."' AND reservasi.tanggal_reservasi = DATE(NOW()) ");
+			$jamreservasiandaPHP = substr($userQuery[0]['jam'],0,2);
+		}
 	}
 	
 	if(!isset($jamreservasiandaPHP)){
