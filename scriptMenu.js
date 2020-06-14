@@ -11,11 +11,17 @@ $("#menu-toggle").click(function(e) {
     
       
        menuRow.addEventListener("click",async (e)=>{
-        if(tipe === "Pelanggan" || tipe === "Kasir" || tipe === "Admin" ){
-            alert("Hanya bisa melihat");
-            window.location = 'menu.php';
-            document.querySelector('.modal').hidden = true;
-        }
+            if(tipe === "Kasir" || tipe === "Admin" ){
+                alert("Hanya bisa melihat");
+                window.location = 'menu.php';
+                document.querySelector('.modal').hidden = true;
+            }
+
+            if(izin != "true"){
+                alert("Anda harus ke home untuk memesan makanan");
+                window.location = 'index.php';
+                document.querySelector('.modal').hidden = true;
+            }
           const modalBody = document.querySelector('.modal-body');
           // =========================== get menu =======================
           let targetParent = e.target.parentElement
@@ -36,23 +42,25 @@ $("#menu-toggle").click(function(e) {
           strMejaValue = strMejaValue.replace(/\'/g, '"');
           const dataMeja = JSON.parse(strMejaValue);
           let str2 = ""
-          for ( let strDataMeja of dataMeja){
-              if(strDataMeja.nama_pelanggan != "kosong"){
-                   str2 += `<option value='${strDataMeja.id_meja}'>${strDataMeja.id_meja} - ${strDataMeja.status} - ${strDataMeja.nama_pelanggan} </option>`;
-              }else{
-                  str2 += `<option value='${strDataMeja.id_meja}'>${strDataMeja.id_meja} - ${strDataMeja.status}</option>`
-              }	
-          }
+        //   for ( let strDataMeja of dataMeja){
+        //       if(strDataMeja.nama_pelanggan != "kosong"){
+        //            str2 += `<option value='${strDataMeja.id_meja}'>${strDataMeja.id_meja} - ${strDataMeja.status} - ${strDataMeja.nama_pelanggan} </option>`;
+        //       }else{
+        //           str2 += `<option value='${strDataMeja.id_meja}'>${strDataMeja.id_meja} - ${strDataMeja.status}</option>`
+        //       }	
+        //   }
+         
            let isi2 = `
-      <form action="tambahPesanan.php" method="POST">
+        <form action="tambahPesanan.php" method="POST">
+           <h3>Meja ${mejaGET}</h3>
+           
+
           <h4>${menuStr[1]}, <span class="harga">${menuStr[2]}</span></h4>
           <input type="hidden" name="idMenu" value="${menuStr[0]}">
           <input type="hidden" name="harga" value="${menuStr[2]}">
           <div class="form-group mr-3 ml-3">
-              <label for="nomorMeja">No Meja</label>
-              <select name="nomorMeja" class="form-control" id="nomorMeja">
-              ${str2}
-              </select>
+              
+              <input type="hidden" name="nomorMeja" value="${mejaGET}">
           </div>
           <div class="form-group mr-3 ml-3">
               <label for="exampleFormControlTextarea1">Deskripsi</label>
@@ -72,11 +80,11 @@ $("#menu-toggle").click(function(e) {
       </form>`
                modalBody.innerHTML = isi2;
 
-          let selectTag = document.querySelector("#nomorMeja")
-          console.log(selectTag)
-          selectTag.addEventListener("change",(e)=>{
-              console.log(e.target.value)
-           })
+        //   let selectTag = document.querySelector("#nomorMeja")
+        //   console.log(selectTag)
+        //   selectTag.addEventListener("change",(e)=>{
+        //       console.log(e.target.value)
+        //    })
            let count = 1;
            let countTotal = document.getElementById("total");
            let countEl = document.getElementById("count");

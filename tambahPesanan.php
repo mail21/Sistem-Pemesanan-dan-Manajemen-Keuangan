@@ -18,7 +18,7 @@
     $id_user = $_SESSION['id_user'];
 
     
-    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, '0000000', '$id_meja', '$id_menu', '$id_user', '$harga', '$quantity', '$total', '$ket')");
+    mysqli_query($db,"INSERT INTO order_list VALUES (NULL, '0000000', '$id_meja', '$id_menu', '$id_user', '$harga', '$quantity', '$total', '$ket' , 0 , 0)");
     // if($cek){
     //   echo "berhasil";
     // }else{

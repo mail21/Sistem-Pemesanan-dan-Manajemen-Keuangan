@@ -68,7 +68,7 @@ $("#menu-toggle").click(function(e) {
               let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
-<a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
+<a href="menu.php?izin=true&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
 <div class="formReservasi" hidden>
   <form action="reservasi.php" method="POST">
   <br>
@@ -76,11 +76,11 @@ $("#menu-toggle").click(function(e) {
       <input type="hidden" name="id" value="${id_meja}">
       <label for="no">Jam Mulai:</label>
       <input name="jam" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no" maxlength = "2">
-      <input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" maxlength = "2">
+      <input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" value="00" readonly maxlength = "2">
       <br>
       <label for="no2">Jam Berakhir:</label>
       <input name="jam2" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no2" maxlength = "2">
-      <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" maxlength = "2">
+      <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" value="00" readonly maxlength = "2">
       <br>
       <label for="nama">Nama</label>
       <input name="nama" type="text" class="form-control" value="${namaSession}" id="nama" placeholder="Nama Pelanggan">
@@ -121,24 +121,29 @@ $("#menu-toggle").click(function(e) {
                     document.querySelector('input[name="menit2"]').value = "";
                 }
             });
-            document.querySelector('input[name="jam"]').addEventListener("input",(e)=>{
-                if(e.target.value >= 23 ){
+            let inputJam4 =  document.querySelector('input[name="jam2"]');
+            
+            inputJam4.addEventListener("input",(e)=>{
+                if(inputJam4.value  > 23 ){
                     alert("Jam Operasional 10:00 - 23:00");
-                    document.querySelector('input[name="jam"]').value = "";
+                    inputJam4.value = "";
                 }
-            });
-            document.querySelector('input[name="jam2"]').addEventListener("input",(e)=>{
-                if(e.target.value >= 23 ){
-                    alert("Jam Operasional 10:00 - 23:00");
-                    document.querySelector('input[name="jam"]').value = "";
+                if(inputJam4.value.length == 2){
+                    if(inputJam4.value < document.querySelector('input[name="jam"]').value){
+                        alert("Tidak boleh kurang dari jam Awal");
+                        inputJam4.value = '';
+                    }
+
+                    if(inputJam4.value  === document.querySelector('input[name="jam"]').value){
+                        alert("Waktu reservasi Minimal 1 jam");
+                        inputJam4.value = '';
+                    }
+
+                
                 }
             });
           }else if(statusMeja == "aktif"){
-            if(tipe === "Pelanggan" ){
-                alert("Anda Tidak Mempunyai Akses");
-                window.location = 'index.php';
-                document.querySelector('.modal').hidden = true;
-            }
+            
               document.querySelector('.modal-dialog').classList.add('modal-lg');
               let data = await row.dataset.menu;
               console.log(id_meja)
@@ -148,7 +153,7 @@ $("#menu-toggle").click(function(e) {
               modalTitle.textContent = `Meja ${id_meja}`;
               let isi = `
       <form action="cetakStruk.php" method="POST">
-      <a href="menu.php"><button type="button" class="btn btn-primary mb-3">Pesan</button></a>
+      <a href="menu.php?izin=true&meja=${id_meja}"><button type="button" class="btn btn-primary mb-3">Pesan</button></a>
           <input type="hidden" name="idSumber" value="1">
       <input type="hidden" name="id_meja" value="${id_meja}">
           <table class="mb-3" cellpadding="6">`;
@@ -210,7 +215,6 @@ $("#menu-toggle").click(function(e) {
                     jamAwal[2] = dataRealReservasi.nama;
                     jamAwal[3] = dataRealReservasi.jam;
                     dataAntrian.push(jamAwal);
-                    console.log(dataRealReservasi.id);
                     strSortAntrian.push(dataRealReservasi.id);
                     // dataAntrian[i][0].sort((a,b)=>a - b);
                     i++;
@@ -267,7 +271,7 @@ $("#menu-toggle").click(function(e) {
               
               let	isi =`
             <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
-            <a href="menu.php?idReservasi=${newIdReservasi}&antrian=${joinStrSortAntrian}&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
+            <a href="menu.php?from=reservasi&jamreservasi=${jamreservasianda}&izin=true&idReservasi=${newIdReservasi}&antrian=${joinStrSortAntrian}&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
             <a href="kosong.php?antri=${idReservasi}"><button type="button" class="btn btn-primary" ${hidden}>Kosongkan</button></a>
             <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
             <br><br><h5>jadwal reservasi</h5>

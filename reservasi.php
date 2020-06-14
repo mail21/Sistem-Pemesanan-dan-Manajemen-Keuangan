@@ -21,7 +21,7 @@
 		mysqli_query($db,"UPDATE meja SET jamAntri = '$antri', antrian = '$reservasi' WHERE id_meja = ".$_POST['id']);	
 		header("location:index.php");
 	}else{
-		mysqli_query($db,"INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`, `email`) VALUES (NULL, '$id_user', '".$date."', '".$waktu."', '".$_POST['nama']."', '".$_POST['no']."', '".$_POST['email']."')");
+		mysqli_query($db,"INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`, `email`) VALUES (NULL, '$id_user', NOW(), '".$waktu."', '".$_POST['nama']."', '".$_POST['no']."', '".$_POST['email']."')");
 		$antri = $waktu;
 		$reservasi = $jmlReservasi;
 		mysqli_query($db,"UPDATE meja SET id_reservasi = $jmlReservasi, status = 'reservasi', jamAntri = '$antri', antrian = '$reservasi'  WHERE id_meja = ".$_POST['id']);	

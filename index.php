@@ -3,13 +3,15 @@
 	include "koneksi.php";
 	include "functions.php";
 	require 'cek-sesi.php';
-	
 	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi ORDER BY id_meja ASC");
 	$orderListQuery = query("SELECT 
 	meja.id_meja AS nomormeja,
 	menu.nama AS namamenu,
 	user.nama AS namauser,
 	menu.harga AS Harga,
+	order_list.siap AS siap,
+	order_list.saji AS saji,
+	order_list.id_order_list AS idOrder,
 	order_list.quantity AS quantity,
 	order_list.total AS total,
 	order_list.ket AS keterangan,
@@ -27,11 +29,21 @@
 	$session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
 	$session_nama = (isset($_SESSION['nama']))? $_SESSION['nama']:'';
 	$session_email = (isset($_SESSION['email']))? $_SESSION['email']:'';
+	if($_SESSION['tipe'] != "Koki"){
+		$userQuery = query("select jam from reservasi WHERE reservasi.id_user = '".$_SESSION['id_user']."' AND reservasi.tanggal_reservasi = DATE(NOW()) ");
+		$jamreservasiandaPHP = substr($userQuery[0]['jam'],0,2);
+	}
+	
+	if(!isset($jamreservasiandaPHP)){
+		$jamreservasiandaPHP = "NULL";
+	}
  ?>
  <script type="text/javascript">
 	var tipe='<?php echo $session_value;?>';
 	var namaSession='<?php echo $session_nama;?>';
 	var emailSession='<?php echo $session_email;?>';
+	var jamreservasianda = '<?php echo $jamreservasiandaPHP?>' ;
+	
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -188,13 +200,13 @@
 					<thead class="thead-dark">
 						<tr>
 						<th scope="col">Nomor</th>
+						<th scope="col">Sudah Siap?</th>
+						<th scope="col">Sudah disajikan?</th>
 						<th scope="col">Nomor Meja</th>
 						<th scope="col">Nama Menu</th>
-						<th scope="col">Nama User</th>
-						<th scope="col">Harga</th>
 						<th scope="col">Quantity</th>
-						<th scope="col">Total</th>
 						<th scope="col">Keterangan</th>
+						
 						</tr>
 					</thead>
 					<tbody>
@@ -203,13 +215,22 @@
 						foreach($orderListQuery as $order){
 							$no++;
 							echo "<tr>
-								<th scope='row'>$no</th>
-								<td>".$order['nomormeja']."</td>
+								<th scope='row'>$no</th>";
+								if($order['siap'] == "1"){
+									echo "<td><a href='#'><button class='btn btn-success btnSiap'>Ready</button></a></td>";
+								}else{
+									echo "<td><a href='siap.php?siap=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSiap'>Not Ready</button></a></td>";
+
+								}
+
+								if($order['saji'] == "1"){
+									echo "<td><a href='#'><button class='btn btn-success btnSaji'>Ready</button></a></td>";
+								}else{
+									echo "<td><a href='siap.php?saji=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSaji'>Not Ready</button></a></td>";
+								}
+							echo"<td>".$order['nomormeja']."</td>
 								<td>".$order['namamenu']."</td>
-								<td>".$order['namauser']."</td>
-								<td>".$order['Harga']."</td>
 								<td>".$order['quantity']."</td>
-								<td>".$order['total']."</td>
 								<td>".$order['keterangan']."</td>
 							</tr>";
 						} 
@@ -250,7 +271,25 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptindex.js"></script>
 <script>
+let btnSiap = document.querySelectorAll('.btnSiap');
+for (let iterator of btnSiap) {
+	iterator.addEventListener("click", ()=>{
+		if(tipe != "Koki"){
+			alert("Anda Tidak mempunyai hak");	
+		}
+	});
+	
+}
 
+let btnSaji = document.querySelectorAll('.btnSaji');
+for (let iterator2 of btnSaji) {
+	iterator2.addEventListener("click", ()=>{
+		if(tipe != "Pelayan"){
+			alert("Anda Tidak mempunyai hak");	
+		}
+	});
+	
+}
     
 if(tipe === "Koki" ){
     btnDenah.hidden = true;

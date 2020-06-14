@@ -3,12 +3,37 @@
 	include "functions.php";
 	require 'cek-sesi.php';
 
-	$_GET['idReservasi'] = !empty($_GET['idReservasi']) && is_string($_GET['idReservasi']) ? $_GET['idReservasi'] : '';
-	$_GET['antrian'] = !empty($_GET['antrian']) && is_string($_GET['antrian']) ? $_GET['antrian'] : '';
-	$_GET['meja'] = !empty($_GET['meja']) && is_string($_GET['meja']) ? $_GET['meja'] : '';
-	if($_GET['idReservasi'] != 'undefined'){
+	$_GET['from'] = !empty($_GET['from']) && is_string($_GET['from']) ? $_GET['from'] : '';
+	$_GET['izin'] = !empty($_GET['izin']) && is_string($_GET['izin']) ? $_GET['izin'] : 'false';
+	if($_GET['from'] == 'reservasi'){
+		$_GET['jamreservasi'] = !empty($_GET['jamreservasi']) && is_string($_GET['jamreservasi']) ? $_GET['jamreservasi'] : '';
+
+		$_GET['idReservasi'] = !empty($_GET['idReservasi']) && is_string($_GET['idReservasi']) ? $_GET['idReservasi'] : '1';
+		$_GET['antrian'] = !empty($_GET['antrian']) && is_string($_GET['antrian']) ? $_GET['antrian'] : '';
 		mysqli_query($db,"UPDATE meja SET id_reservasi ='".$_GET['idReservasi']."' , antrian ='".$_GET['antrian']."'  WHERE id_meja ='".$_GET['meja']."' ");
+		
+	
+		$jamBerapaSkrng =  query("SELECT TIME_FORMAT(NOW(), '%H') AS time ");
+		// var_dump($jamBerapaSkrng );
+		// echo "<br>";
+		// var_dump($_GET['jamreservasi']  );
+		// echo "<br>"; 
+		// echo $_GET['jamreservasi'] . "<" . $jamBerapaSkrng[0]['time'];
+		
+		if($jamBerapaSkrng[0]['time'] > $_GET['jamreservasi'] ){
+			echo "<script>
+			alert('Anda Telah Melewatkan Reservasi Anda');
+			window.location= 'index.php'
+
+			</script>";
+		}else if($_GET['jamreservasi'] != $jamBerapaSkrng[0]['time']){
+			echo "<script>
+			alert('Anda belum bisa melakukan pemesanan sekarang');
+			window.location= 'index.php'
+			</script>";
+		}
 	}
+	$_GET['meja'] = !empty($_GET['meja']) && is_string($_GET['meja']) ? $_GET['meja'] : '';
 
 	if($_SESSION['tipe'] === "Koki"){
 		header("location:index.php");
@@ -43,7 +68,9 @@
   <link rel="stylesheet" href="assets/styles/sidebar.css">
 </head>
 <script type="text/javascript">
-    var tipe='<?php echo $session_value;?>';
+	var tipe='<?php echo $session_value;?>';
+	var izin="<?php echo $_GET['izin'];?>";
+	var mejaGET="<?php echo $_GET['meja'];?>";
 </script>
 <style>	
 	.menu{
