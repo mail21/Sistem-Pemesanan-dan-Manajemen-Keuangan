@@ -29,6 +29,9 @@ $("#menu-toggle").click(function(e) {
           }
           // =========================== get menu =======================
           let noMeja = document.querySelector("#hiddenMeja");
+          console.log("noMeja",noMeja);
+
+          console.log("noMeja.value",noMeja.value);
           let strMejaValue = noMeja.value;
           strMejaValue = strMejaValue.replace(/\'/g, '"');
           const dataMeja = JSON.parse(strMejaValue);

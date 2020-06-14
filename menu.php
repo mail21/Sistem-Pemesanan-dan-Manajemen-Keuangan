@@ -3,6 +3,13 @@
 	include "functions.php";
 	require 'cek-sesi.php';
 
+	$_GET['idReservasi'] = !empty($_GET['idReservasi']) && is_string($_GET['idReservasi']) ? $_GET['idReservasi'] : '';
+	$_GET['antrian'] = !empty($_GET['antrian']) && is_string($_GET['antrian']) ? $_GET['antrian'] : '';
+	$_GET['meja'] = !empty($_GET['meja']) && is_string($_GET['meja']) ? $_GET['meja'] : '';
+	if($_GET['idReservasi'] != 'undefined'){
+		mysqli_query($db,"UPDATE meja SET id_reservasi ='".$_GET['idReservasi']."' , antrian ='".$_GET['antrian']."'  WHERE id_meja ='".$_GET['meja']."' ");
+	}
+
 	if($_SESSION['tipe'] === "Koki"){
 		header("location:index.php");
 	}
@@ -16,7 +23,7 @@
 			$strMeja .= ",";
 	 	}	
 		$id_meja = $MEJA['id_meja'];
-		$nama_pelanggan = $MEJA['nama_pelanggan'];
+		$nama_pelanggan = preg_replace('/\s+/', '', $MEJA['nama_pelanggan']);
 		$id_reservasi = $MEJA['id_reservasi'];
 		$status = $MEJA['status'];
 		$strMeja .= "{'id_meja':'$id_meja','nama_pelanggan':'$nama_pelanggan','id_reservasi':$id_reservasi,'status':'$status'}";
@@ -122,6 +129,7 @@
 		  <?php 
 			echo "<input type='hidden' id='hiddenMeja' value=[$strMeja]>";
 			foreach ($boxMenu as $menuData) {
+				
 				echo "
 				<div class='row menu mt-3' style='border : 1px solid' data-toggle='modal' data-target='#ModalMenu'>
 				  <menu-item> ".$menuData['id_menu'] ." </menu-item>
@@ -164,19 +172,5 @@
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptMenu.js"></script>
-<script>
-  if(tipe === "Pelanggan"){
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }else if(tipe === "Pelayan"){
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }else if(tipe === "Kasir"){
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }
 
-  document.addEventListener("click", (e)=>{
-	if(e.target.classList.contains("linkLaporan") && (tipe === "Koki" || tipe === "Pelayan" || tipe === "Pelanggan"|| tipe === "Kasir")){
-		alert("Anda Tidak mempunyai Akses");
-	}
-  });
-</script>
 </html>

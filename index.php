@@ -4,7 +4,7 @@
 	include "functions.php";
 	require 'cek-sesi.php';
 	
-	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi");
+	$mejaQuery = query("SELECT * FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi ORDER BY id_meja ASC");
 	$orderListQuery = query("SELECT 
 	meja.id_meja AS nomormeja,
 	menu.nama AS namamenu,
@@ -25,9 +25,13 @@
 	WHERE meja.status = 'aktif' AND order_list.no_transaksi = '0000000'
 	ORDER BY order_list.id_order_list DESC");
 	$session_value=(isset($_SESSION['tipe']))?$_SESSION['tipe']:''; 
+	$session_nama = (isset($_SESSION['nama']))? $_SESSION['nama']:'';
+	$session_email = (isset($_SESSION['email']))? $_SESSION['email']:'';
  ?>
  <script type="text/javascript">
-    var tipe='<?php echo $session_value;?>';
+	var tipe='<?php echo $session_value;?>';
+	var namaSession='<?php echo $session_nama;?>';
+	var emailSession='<?php echo $session_email;?>';
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +49,7 @@
 <div class="d-flex" id="wrapper">
 	<!-- Sidebar -->
     <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Welcome , <br>	<?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
+      <div class="sidebar-heading">Welcome , <br> <?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
       <div class="list-group list-group-flush">
         <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
         <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
@@ -60,7 +64,7 @@
 	
 	<!-- Page Content -->
     <div id="page-content-wrapper">
-
+			
 		<div class="container-fluid banner"></div>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 			<button class="btn btn-info" id="menu-toggle">Toggle Menu</button>
@@ -116,7 +120,36 @@
 						if ($meja['status'] === "kosong") {
 							echo "<div class='meja $status mr-2' data-toggle='modal' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'><span class='id'>".$meja['id_meja']."</span></div>";
 						}else if($meja['status'] === "reservasi"){
-							echo "<div class='meja $status mr-2' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
+							$strReservasi = "";
+							$mejaAntrian = explode(",",$meja['antrian']);
+							$mejaAntrianLength = count($mejaAntrian);
+							$x = $mejaAntrianLength;
+							for ($i=0; $i < $mejaAntrianLength ; $i++) {
+								
+								$reservasiQuery = query("SELECT nama_pelanggan,jam,antrian FROM reservasi JOIN meja ON meja.id_reservasi = reservasi.id_reservasi WHERE reservasi.id_reservasi = ".$mejaAntrian[$i]);
+								foreach ($reservasiQuery as $x) {
+									$b = 0;
+									$listAntriFromDb = explode(",",$x['antrian']);
+									// echo "===================<br>";
+									// $datamysqlantrian = $x['antrian'];
+									// echo "<br>";
+									foreach ($listAntriFromDb as $y) {
+										if ($b>0) {
+											$strReservasi.=",";
+										}
+										
+										$Query = query("SELECT id_reservasi,nama_pelanggan,jam FROM reservasi WHERE id_reservasi = $y");
+										$idreservasiforjs = $Query[0]["id_reservasi"];
+										$nama_pel = $ket = preg_replace('/\s+/', '', $Query[0]["nama_pelanggan"]);
+										$jam = $Query[0]["jam"];
+										$strReservasi .= "{'id':'$idreservasiforjs','nama':'$nama_pel','jam':'$jam'}";
+										$b++;
+									}
+									echo "<div style='width:90px;' class='meja $status mr-2' data-datareservasi=[$strReservasi] data-id='".$meja['id_meja']."' data-antrian='".$meja['antrian']."' data-toggle='modal' data-jam='".$meja['jamAntri']."' data-pelanggan='".$meja['nama_pelanggan']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
+									$strReservasi = '';
+								}
+								
+							}
 						}else{
 							$menu = [];
 							$id = $meja['id_meja'];
@@ -135,7 +168,7 @@
 								$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
 								$a++;
 							}
-							echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."'  data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
+							echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."' data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
 						}
 					}
 				?>
@@ -217,6 +250,8 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptindex.js"></script>
 <script>
+
+    
 if(tipe === "Koki" ){
     btnDenah.hidden = true;
     btnOrderList.hidden = true;
@@ -228,12 +263,7 @@ if(tipe === "Koki" ){
   }else if(tipe === "Pelanggan"){
     btnDenah.hidden = true;
 	btnOrderList.hidden = true;
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }else if(tipe === "Pelayan"){
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }else if(tipe === "Kasir"){
-	document.querySelector(".linkLaporan").setAttribute("href", "");
-  }else if(tipe === "Admin" ){
+}else if(tipe === "Admin" ){
     btnDenah.hidden = true;
     btnOrderList.hidden = true;
     containerDenah.hidden = true;

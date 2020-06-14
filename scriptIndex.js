@@ -2,11 +2,6 @@ $("#menu-toggle").click(function(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
   });
-
-  console.log(tipe);
-
-  
-
   const btnDenah = document.querySelector('.btnDenah');
   const  btnOrderList = document.querySelector('.btnOrderList');
   const containerDenah = document.querySelector('.containerDenah');
@@ -64,21 +59,33 @@ $("#menu-toggle").click(function(e) {
           document.querySelector('.modal-dialog').classList.remove('modal-lg');
           let id_meja = await row.dataset.id;
           let statusMeja = await row.dataset.status;
+          
           if (statusMeja == "kosong") {
-            
+            if(tipe === "Kasir"){
+                namaSession = "";
+                emailSession = "";
+            }
               let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
 <a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
 <div class="formReservasi" hidden>
   <form action="reservasi.php" method="POST">
+  <br>
+            <h5>Jam Operasional 10:00 - 23:00</h5>
       <input type="hidden" name="id" value="${id_meja}">
-      <label for="no">Jam:</label>
-      <input name="jam" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no">
-      <input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="Menit">
+      <label for="no">Jam Mulai:</label>
+      <input name="jam" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no" maxlength = "2">
+      <input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" maxlength = "2">
+      <br>
+      <label for="no2">Jam Berakhir:</label>
+      <input name="jam2" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no2" maxlength = "2">
+      <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" maxlength = "2">
       <br>
       <label for="nama">Nama</label>
-      <input name="nama" type="text" class="form-control" id="nama" placeholder="Nama Pelanggan">
+      <input name="nama" type="text" class="form-control" value="${namaSession}" id="nama" placeholder="Nama Pelanggan">
+      <label for="email">Email</label>
+      <input name="email" type="text" class="form-control" value="${emailSession}" id="email" placeholder="Email">
       <label for="no">No Telepon</label>
       <input name="no" type="text" class="form-control" id="no" placeholder="Nomor Telepon">
       <button name="submit" class="btn btn-primary mt-3">submit</button>
@@ -100,7 +107,32 @@ $("#menu-toggle").click(function(e) {
               }else{
                 reservasiToggle.hidden = true;
               }
-              
+              document.querySelector('input[name="menit"]').addEventListener("input",(e)=>{
+                console.log(typeof e.target.value);
+                if(e.target.value >= 60){
+                    alert("Mohon Masukkan Format menit");
+                    document.querySelector('input[name="menit"]').value = "";
+                }
+            });
+            document.querySelector('input[name="menit2"]').addEventListener("input",(e)=>{
+                console.log(typeof e.target.value);
+                if(e.target.value >= 60){
+                    alert("Mohon Masukkan Format menit");
+                    document.querySelector('input[name="menit2"]').value = "";
+                }
+            });
+            document.querySelector('input[name="jam"]').addEventListener("input",(e)=>{
+                if(e.target.value >= 23 ){
+                    alert("Jam Operasional 10:00 - 23:00");
+                    document.querySelector('input[name="jam"]').value = "";
+                }
+            });
+            document.querySelector('input[name="jam2"]').addEventListener("input",(e)=>{
+                if(e.target.value >= 23 ){
+                    alert("Jam Operasional 10:00 - 23:00");
+                    document.querySelector('input[name="jam"]').value = "";
+                }
+            });
           }else if(statusMeja == "aktif"){
             if(tipe === "Pelanggan" ){
                 alert("Anda Tidak Mempunyai Akses");
@@ -159,18 +191,189 @@ $("#menu-toggle").click(function(e) {
                   }
               });
           }else if(statusMeja == "reservasi"){
-            if(tipe === "Pelanggan" ){
+            if(tipe === "Pelanggan" || tipe === "Kasir" || tipe === "Pelayan"){
+                let nama_pelanggan = await row.dataset.pelanggan;
+                let jamAntri = []
+                let idReservasi = await row.dataset.antrian;
+                let dataReservasiJs = await row.dataset.datareservasi; 
+                let data2 = dataReservasiJs.replace(/\'/g, '"');
+                let realDataReservasi = JSON.parse(data2);
+                let jamAwal = new Array(realDataReservasi.length);
+                let strSortAntrian = [];
+                var i = 0;
+
+                let dataAntrian = [];
+                for (let dataRealReservasi of realDataReservasi) {
+                    jamAwal = new Array();
+                    jamAwal[0] = dataRealReservasi.jam.substring(0, 2);
+                    jamAwal[1] = dataRealReservasi.id;
+                    jamAwal[2] = dataRealReservasi.nama;
+                    jamAwal[3] = dataRealReservasi.jam;
+                    dataAntrian.push(jamAwal);
+                    console.log(dataRealReservasi.id);
+                    strSortAntrian.push(dataRealReservasi.id);
+                    // dataAntrian[i][0].sort((a,b)=>a - b);
+                    i++;
+                }
+            
+                let arrayBaru = [];
+                let minimum = [23];
+                for (let iterator of dataAntrian) {
+                   var b = iterator
+                   if(b[0] < minimum[0]){
+                     minimum = b;
+                   }
+                }
+                console.log("minimum",minimum);
+                console.log("minimum ArrayBaru :",arrayBaru[1])
+                const index = strSortAntrian.indexOf(minimum[1]);
+                if (index > -1) {
+                    strSortAntrian.splice(index, 1);
+                }
+                strSortAntrian.unshift(minimum[1]);
+                var newIdReservasi = minimum[1];
+                let newNama_pelanggan = minimum[2];
+                var joinStrSortAntrian = strSortAntrian.join();
+                let list = `<table class="table">
+                <thead>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Jam</th>
+                </thead>
+                <tbody>`;
+                let jamMulai = [];
+                let jamAkhir = [];
+                for (let dataRealReservasi of realDataReservasi) {
+                    // console.log(dataRealReservasi.jam);
+                    list += `<tr><td>${dataRealReservasi.id}</td><td>${dataRealReservasi.nama}</td><td>${dataRealReservasi.jam}</td></tr>`;  
+                    jamMulai.push(dataRealReservasi.jam.substring(0, 2));
+                    jamAkhir.push(dataRealReservasi.jam.substr(6, 2));
+                }
+                // console.log(jamMulai.sort());
+                console.log("jam Mulai", jamMulai);
+                console.log("jam Akhir", jamAkhir);
+
+                // console.log(jamAntri.split(","));
+                list += `</tbody>
+                </table>`;
+              modalTitle.textContent = `Meja ${id_meja}`;
+              let hidden = "";
+              if(tipe === "Pelanggan"){
+                hidden = "hidden";
+              }
+              if(newNama_pelanggan !== undefined){
+                nama_pelanggan = newNama_pelanggan;
+              }
+              
+              let	isi =`
+            <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
+            <a href="menu.php?idReservasi=${newIdReservasi}&antrian=${joinStrSortAntrian}&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
+            <a href="kosong.php?antri=${idReservasi}"><button type="button" class="btn btn-primary" ${hidden}>Kosongkan</button></a>
+            <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
+            <br><br><h5>jadwal reservasi</h5>
+            ${list}
+            <br>
+            <div class="formReservasi" hidden>
+            <form action="reservasi.php" method="POST">
+            <h5>Jam Operasional 10:00 - 23:00</h5>
+                <input type="hidden" name="id" value="${id_meja}">
+                <input type="hidden" name="tambah" value="true">
+                <label for="no">Jam Mulai:</label>
+                <input name="jam" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no" maxlength = "2">
+                <input name="menit" type="text" class="form-control inputWaktu mt-3" placeholder="00" value="00" maxlength = "2"  readonly>
+                <br>
+                <label for="no">Jam Berakhir:</label>
+                <input name="jam2" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no" maxlength = "2">
+                <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="00" value="00" maxlength = "2" readonly >
+                <br>
+                <label for="nama">Nama</label>
+                <input name="nama" type="text" class="form-control" value="${namaSession}" id="nama" placeholder="Nama Pelanggan">
+                <label for="email">Email</label>
+                <input name="email" type="text" class="form-control" value="${emailSession}" id="email" placeholder="Email">
+                <label for="no">No Telepon</label>
+                <input name="no" type="text" class="form-control" id="no" placeholder="Nomor Telepon">
+                <button name="submit" class="btn btn-primary mt-3">submit</button>
+            </form>
+            </div>
+            `;              
+                modalBody.innerHTML = isi;
+                document.querySelector(".reservasiToggle").addEventListener('click', function(){
+                      document.querySelector(".formReservasi").toggleAttribute('hidden');
+                })
+                document.querySelector('input[name="menit"]').addEventListener("input",(e)=>{
+                    console.log(typeof e.target.value);
+                    if(e.target.value >= 60){
+                        alert("Mohon Masukkan Format menit");
+                        document.querySelector('input[name="menit"]').value = "";
+                    }
+                });
+
+                let inputJam1 = document.querySelector('input[name="jam"]');
+                let inputJam2 = document.querySelector('input[name="jam2"]')
+                document.querySelector('input[name="menit2"]').addEventListener("input",(e)=>{
+                    console.log(typeof e.target.value);
+                    if(e.target.value >= 60){
+                        alert("Mohon Masukkan Format menit");
+                        document.querySelector('input[name="menit2"]').value = "";
+                    }
+                });
+                inputJam1.addEventListener("input",(e)=>{
+                    if(inputJam1.value >= 23 ){
+                        alert("Jam Operasional 10:00 - 23:00");
+                        inputJam1.value = "";
+                    }
+
+                    if(inputJam1.value.length == 2){
+                        for (let i = 0; i < jamMulai.length; i++) {
+                            if(inputJam1.value > jamMulai[i] && inputJam1.value < jamAkhir[i]){
+                                alert("Sudah ada yang memesan pada waktu tersebut");
+                                inputJam1.value = "";
+                            }
+
+                            if(inputJam1.value == jamMulai[i]){
+                                alert("Sudah ada yang memesan pada waktu tersebut");
+                                inputJam1.value = "";
+                            }
+                            
+                        } 
+                    }
+                });
+                inputJam2.addEventListener("input",(e)=>{
+                    if(inputJam2.value  > 23 ){
+                        alert("Jam Operasional 10:00 - 23:00");
+                        inputJam2.value = "";
+                    }
+                    if(inputJam2.value.length == 2){
+                        if(inputJam2.value < inputJam1.value){
+                            alert("Tidak boleh kurang dari jam Awal");
+                            inputJam2.value = '';
+                        }
+
+                        if(inputJam2.value  === inputJam1.value){
+                            alert("Waktu reservasi Minimal 1 jam");
+                            inputJam2.value = '';
+                        }
+
+                    
+                        for (let i = 0; i < jamMulai.length; i++) {
+                            if(inputJam1.value > jamMulai[i] && inputJam1.value < jamAkhir[i]){
+                                alert("Sudah ada yang memesan pada waktu tersebut");
+                                inputJam2.value = '';
+                            }
+                            
+                            if(inputJam2.value == jamAkhir[i]){
+                                alert("Sudah ada yang memesan pada waktu tersebut");
+                                inputJam2.value = '';
+                            }
+                        } 
+                    }
+                });
+            }else{
                 alert("Anda Tidak Mempunyai Akses");
                 window.location = 'index.php';
                 document.querySelector('.modal').hidden = true;
             }
-              let nama_pelanggan = await row.dataset.pelanggan;
-              modalTitle.textContent = `Meja ${id_meja}`;
-              let	isi =`
-      <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
-      <a href="menu.php"><button type="button" class="btn btn-primary">Pesan</button></a>
-      <a href="kosong.php?nama='${nama_pelanggan}'"><button type="button" class="btn btn-primary">Kosongkan</button></a>`;
-              modalBody.innerHTML = isi;
+              
           }
       })
   }

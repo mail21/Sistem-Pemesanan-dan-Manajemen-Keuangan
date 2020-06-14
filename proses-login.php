@@ -20,6 +20,7 @@ $sesi = mysqli_fetch_assoc($sesi);
 	$_SESSION['nama'] = $sesi['nama'];
 	$_SESSION['status'] = "login";
 	$_SESSION['tipe'] = $sesi['tipe'];
+	$_SESSION['email'] = $sesi['email'];
 	header("location:index.php");
 }else{
 	header("location:login.php?pesan=gagal");
