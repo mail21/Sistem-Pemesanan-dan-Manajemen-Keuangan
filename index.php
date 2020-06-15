@@ -68,7 +68,9 @@
       <div class="sidebar-heading">Welcome , <br> <?= $_SESSION['tipe'] ?> <?= $_SESSION['nama']  ?> </div>
       <div class="list-group list-group-flush">
         <a href="index.php" class="list-group-item list-group-item-action bg-light linkHome">Home</a>
-        <a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
+		<?php if($session_value != "Koki"): ?>
+			<a href="menu.php" class="list-group-item list-group-item-action bg-light linkPesan">Pesan</a>
+		<?php endif; ?>  
 		<?php if($session_value === "Admin"): ?>
 			<a href="menuLaporan.php" class="list-group-item list-group-item-action bg-light linkLaporan">Laporan</a>
 			<a href="halamanStaff.php" class="list-group-item list-group-item-action bg-light linkLaporan">Staff</a>
