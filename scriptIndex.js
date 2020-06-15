@@ -94,10 +94,15 @@ $("#menu-toggle").click(function(e) {
               modalBody.innerHTML = isi;
               modalTitle.textContent = `Meja ${id_meja}`;
               let reservasiToggle = document.querySelector(".reservasiToggle")
+              if(tipe === "Pelanggan"){
+                document.querySelector('input[name="nama"]').readOnly  = true;
+                document.querySelector("input[name='email']").readOnly  = true;
+              }
               if(tipe === "Kasir" || tipe === "Pelanggan" ){
                   reservasiToggle.addEventListener('click', function(){
                       if(tipe === "Kasir" || tipe === "Pelanggan" ){
                           document.querySelector(".formReservasi").toggleAttribute('hidden');
+                          
                         }else{
                             alert("Anda Tidak Mempunyai Akses");
                             window.location = 'index.php';
@@ -400,6 +405,10 @@ $("#menu-toggle").click(function(e) {
             `;              
                 modalBody.innerHTML = isi;
                 let tombolPesan2 = document.querySelector(".tombolPesan2");
+                if(tipe === "Pelanggan"){
+                    document.querySelector('input[name="nama"]').readOnly  = true;
+                    document.querySelector("input[name='email']").readOnly  = true;
+                  }
                 var today = new Date();
                 var time = today.getHours();
                 if(time < 10){
