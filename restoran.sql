@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2020 at 04:07 PM
+-- Generation Time: Jun 15, 2020 at 12:53 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -32,7 +32,6 @@ CREATE TABLE `meja` (
   `id_user` int(11) NOT NULL,
   `id_reservasi` int(11) NOT NULL,
   `status` varchar(10) NOT NULL,
-  `jamAntri` text NOT NULL,
   `antrian` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -40,27 +39,27 @@ CREATE TABLE `meja` (
 -- Dumping data for table `meja`
 --
 
-INSERT INTO `meja` (`id_meja`, `id_user`, `id_reservasi`, `status`, `jamAntri`, `antrian`) VALUES
-(1, 5, 1, 'aktif', '11:00-12:00', '36'),
-(2, 3, 29, 'reservasi', '12:00-13:00,11:00-12:00,18:00-20:00', '29,28,39'),
-(3, 3, 38, 'reservasi', '12:00-13:00', '38'),
-(4, 3, 1, 'aktif', '', ''),
-(5, 3, 35, 'reservasi', '12:00-13:00,14:00-15:00,18:00-20:00,12:00-13:00', '35,24,31'),
-(6, 3, 1, 'kosong', '', ''),
-(7, 1, 1, 'kosong', '', ''),
-(8, 1, 1, 'kosong', '', ''),
-(9, 1, 1, 'kosong', '', ''),
-(10, 1, 1, 'kosong', '', ''),
-(11, 1, 1, 'kosong', '', ''),
-(12, 1, 1, 'kosong', '', ''),
-(13, 1, 1, 'kosong', '', ''),
-(14, 1, 1, 'kosong', '', ''),
-(15, 1, 1, 'kosong', '', ''),
-(16, 1, 1, 'kosong', '', ''),
-(17, 1, 1, 'kosong', '', ''),
-(18, 1, 1, 'kosong', '', ''),
-(19, 1, 1, 'kosong', '05:00-06:00,07:00-08:00', ''),
-(20, 1, 1, 'kosong', '', '');
+INSERT INTO `meja` (`id_meja`, `id_user`, `id_reservasi`, `status`, `antrian`) VALUES
+(1, 5, 1, 'aktif', '36'),
+(2, 3, 47, 'reservasi', '47,48'),
+(3, 3, 1, 'kosong', ''),
+(4, 3, 1, 'aktif', ''),
+(5, 3, 1, 'kosong', ''),
+(6, 3, 1, 'kosong', ''),
+(7, 1, 1, 'kosong', ''),
+(8, 1, 1, 'kosong', ''),
+(9, 1, 1, 'kosong', ''),
+(10, 1, 1, 'kosong', ''),
+(11, 1, 1, 'kosong', ''),
+(12, 1, 1, 'kosong', ''),
+(13, 1, 1, 'kosong', ''),
+(14, 1, 1, 'kosong', ''),
+(15, 1, 1, 'kosong', ''),
+(16, 1, 1, 'kosong', ''),
+(17, 1, 1, 'kosong', ''),
+(18, 1, 1, 'kosong', ''),
+(19, 1, 1, 'kosong', ''),
+(20, 1, 1, 'kosong', '');
 
 -- --------------------------------------------------------
 
@@ -297,7 +296,16 @@ INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, 
 (36, 1, '2020-06-14 00:00:00', '11:00-12:00', 'Elsa', '', ''),
 (37, 1, '0000-00-00 00:00:00', '12:00-13:00', 'Plos', '', ''),
 (38, 1, '2020-06-14 16:58:20', '12:00-13:00', 'PLos2', '', ''),
-(39, 5, '2020-06-14 00:00:00', '18:00-20:00', 'Cahya Seta', '', '');
+(39, 5, '2020-06-14 00:00:00', '18:00-20:00', 'Cahya Seta', '', ''),
+(40, 5, '2020-06-15 00:00:00', '10:00-11:00', 'Cahya Seta', '', ''),
+(41, 1, '2020-06-15 00:00:00', '10:00-11:00', 'as', '', ''),
+(42, 1, '2020-06-15 00:00:00', '12:00-13:00', '', '', ''),
+(43, 1, '2020-06-15 00:00:00', '16:00-17:00', 'guest11', '', ''),
+(44, 1, '2020-06-15 00:00:00', '10:00-11:00', 'Ismail', '', ''),
+(45, 3, '2020-06-15 00:00:00', '14:00-15:00', 'Rama Cahya', '', ''),
+(46, 3, '2020-06-15 00:00:00', '14:00-15:00', 'Rama Cahya', '', ''),
+(47, 3, '2020-06-15 00:00:00', '18:00-20:00', 'Rama Cahya2', '', ''),
+(48, 1, '2020-06-15 00:00:00', '21:00-22:00', 'Ismail2', '', '');
 
 -- --------------------------------------------------------
 
@@ -444,7 +452,7 @@ ALTER TABLE `pengeluaran`
 -- AUTO_INCREMENT for table `reservasi`
 --
 ALTER TABLE `reservasi`
-  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id_reservasi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -461,6 +469,14 @@ ALTER TABLE `user`
 --
 ALTER TABLE `order_detail`
   ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`id_sumber`) REFERENCES `sumber` (`id_sumber`);
+
+DELIMITER $$
+--
+-- Events
+--
+CREATE DEFINER=`root`@`localhost` EVENT `reset_reservasi` ON SCHEDULE EVERY 1 DAY STARTS '2020-06-15 23:00:00' ON COMPLETION PRESERVE ENABLE DO UPDATE `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi SET jamAntri = '',antrian = '', meja.id_reservasi = 1,status = "kosong" WHERE reservasi.tanggal_reservasi != "0000-00-00 00:00:00"$$
+
+DELIMITER ;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
