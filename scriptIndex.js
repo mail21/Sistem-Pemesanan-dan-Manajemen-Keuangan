@@ -409,6 +409,10 @@ $("#menu-toggle").click(function(e) {
                     document.querySelector('input[name="nama"]').readOnly  = true;
                     document.querySelector("input[name='email']").readOnly  = true;
                   }
+
+                  if(tipe == "Pelayan"){
+                    document.querySelector(".reservasiToggle").hidden = true;
+                  }
                 var today = new Date();
                 var time = today.getHours();
                 if(time < 10){
@@ -416,7 +420,9 @@ $("#menu-toggle").click(function(e) {
                     tombolPesan2.disabled = true;
                 }
                 document.querySelector(".reservasiToggle").addEventListener('click', function(){
-                      document.querySelector(".formReservasi").toggleAttribute('hidden');
+        
+                        document.querySelector(".formReservasi").toggleAttribute('hidden'); 
+
                 })
                 document.querySelector('input[name="menit"]').addEventListener("input",(e)=>{
                     console.log(typeof e.target.value);
