@@ -47,7 +47,7 @@
 	var namaSession='<?php echo $session_nama;?>';
 	var emailSession='<?php echo $session_email;?>';
 	var jamreservasianda = '<?php echo $jamreservasiandaPHP?>' ;
-	
+
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,7 +161,7 @@
 										$strReservasi .= "{'id':'$idreservasiforjs','nama':'$nama_pel','jam':'$jam'}";
 										$b++;
 									}
-									echo "<div style='width:90px;' class='meja $status mr-2' data-datareservasi=[$strReservasi] data-id='".$meja['id_meja']."' data-antrian='".$meja['antrian']."' data-toggle='modal' data-jam='".$meja['jamAntri']."' data-pelanggan='".$meja['nama_pelanggan']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
+									echo "<div style='width:90px;' class='meja $status mr-2' data-datareservasi=[$strReservasi] data-id='".$meja['id_meja']."' data-antrian='".$meja['antrian']."' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
 									$strReservasi = '';
 								}
 								

@@ -68,7 +68,7 @@ $("#menu-toggle").click(function(e) {
               let	isi =`
 <h3>Meja Masih kosong</h3>
 <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
-<a href="menu.php?izin=true&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
+<a href="menu.php?izin=true&meja=${id_meja}"><button type="button" class="btn btn-primary tombolPesan1">Pesan</button></a>
 <div class="formReservasi" hidden>
   <form action="reservasi.php" method="POST">
   <br>
@@ -95,19 +95,27 @@ $("#menu-toggle").click(function(e) {
               modalTitle.textContent = `Meja ${id_meja}`;
               let reservasiToggle = document.querySelector(".reservasiToggle")
               if(tipe === "Kasir" || tipe === "Pelanggan" ){
-                reservasiToggle.addEventListener('click', function(){
-                    if(tipe === "Kasir" || tipe === "Pelanggan" ){
-                      document.querySelector(".formReservasi").toggleAttribute('hidden');
-                    }else{
-                        alert("Anda Tidak Mempunyai Akses");
-                        window.location = 'index.php';
-                        document.querySelector('.modal').hidden = true;
-                    }
-                  })
-              }else{
-                reservasiToggle.hidden = true;
-              }
-              document.querySelector('input[name="menit"]').addEventListener("input",(e)=>{
+                  reservasiToggle.addEventListener('click', function(){
+                      if(tipe === "Kasir" || tipe === "Pelanggan" ){
+                          document.querySelector(".formReservasi").toggleAttribute('hidden');
+                        }else{
+                            alert("Anda Tidak Mempunyai Akses");
+                            window.location = 'index.php';
+                            document.querySelector('.modal').hidden = true;
+                        }
+                    })
+                }else{
+                    reservasiToggle.hidden = true;
+                }
+                let tombolPesan1 = document.querySelector(".tombolPesan1");
+                var today = new Date();
+                var time = today.getHours();
+                if(time < 10){
+                    console.log("bener");
+                    tombolPesan1.disabled = true;
+                }
+                
+                document.querySelector('input[name="menit"]').addEventListener("input",(e)=>{
                 console.log(typeof e.target.value);
                 if(e.target.value >= 60){
                     alert("Mohon Masukkan Format menit");
@@ -122,6 +130,19 @@ $("#menu-toggle").click(function(e) {
                 }
             });
             let inputJam4 =  document.querySelector('input[name="jam2"]');
+            let inputJam3 =  document.querySelector('input[name="jam"]');
+            inputJam3.addEventListener("input",(e)=>{
+                if(inputJam3.value  > 23 ){
+                    alert("Jam Operasional 10:00 - 23:00");
+                    inputJam3.value = "";
+                }
+                if(inputJam3.value.length == 2){
+                    if(inputJam3.value <= time){
+                        alert("Waktu Sudah Berlalu");
+                        inputJam3.value = "";
+                    }
+                }
+            });
             
             inputJam4.addEventListener("input",(e)=>{
                 if(inputJam4.value  > 23 ){
@@ -138,7 +159,10 @@ $("#menu-toggle").click(function(e) {
                         alert("Waktu reservasi Minimal 1 jam");
                         inputJam4.value = '';
                     }
-
+                    if(inputJam4.value <= time){
+                        alert("Waktu Sudah Berlalu");
+                        inputJam4.value = "";
+                    }
                 
                 }
             });
@@ -206,8 +230,12 @@ $("#menu-toggle").click(function(e) {
                 let jamAwal = new Array(realDataReservasi.length);
                 let strSortAntrian = [];
                 var i = 0;
-
+                var today = new Date();
+                var time = today.getHours();
                 let dataAntrian = [];
+                let ketemu;
+                let jamAkhirTest;
+                let antrianLewat = [];
                 for (let dataRealReservasi of realDataReservasi) {
                     jamAwal = new Array();
                     jamAwal[0] = dataRealReservasi.jam.substring(0, 2);
@@ -216,10 +244,31 @@ $("#menu-toggle").click(function(e) {
                     jamAwal[3] = dataRealReservasi.jam;
                     dataAntrian.push(jamAwal);
                     strSortAntrian.push(dataRealReservasi.id);
-                    // dataAntrian[i][0].sort((a,b)=>a - b);
+                    jamAkhirTest =dataRealReservasi.jam.substr(6, 2);
+                    // console.log(jamAwal[0],jamAkhirTest);
+                    if(jamAwal[0] < time){
+                        antrianLewat.push(jamAwal[1]);
+                    }
+                    if(time == jamAwal[0]){
+                        if(jamreservasianda  === "NULL"){
+                                jamreservasianda = jamAwal[0];
+                                newIdReservasi = jamAwal[1];
+                                ketemu = true;
+                        }else{
+                            ketemu = false
+                        }
+                    }else if(time >= jamAwal[0] && time <= jamAkhirTest){
+                        if(jamreservasianda  === "NULL"){
+                            jamreservasianda = time;
+                            newIdReservasi = 1;
+                            ketemu = true;
+                        }else{
+                            ketemu = false
+                        }
+                    }
                     i++;
                 }
-            
+                console.log(antrianLewat.join().split(","));
                 let arrayBaru = [];
                 let minimum = [23];
                 for (let iterator of dataAntrian) {
@@ -228,16 +277,68 @@ $("#menu-toggle").click(function(e) {
                      minimum = b;
                    }
                 }
-                console.log("minimum",minimum);
-                console.log("minimum ArrayBaru :",arrayBaru[1])
-                const index = strSortAntrian.indexOf(minimum[1]);
-                if (index > -1) {
-                    strSortAntrian.splice(index, 1);
+                dataAntrian.sort(sortFunction);
+
+                function sortFunction(a, b) {
+                    if (a[0] === b[0]) {
+                        return 0;
+                    }
+                    else {
+                        return (a[0] < b[0]) ? -1 : 1;
+                    }
                 }
-                strSortAntrian.unshift(minimum[1]);
-                var newIdReservasi = minimum[1];
-                let newNama_pelanggan = minimum[2];
-                var joinStrSortAntrian = strSortAntrian.join();
+
+                console.log("minimum",minimum);
+                function removeA(arr) {
+                    var what, a = arguments, L = a.length, ax;
+                    while (L > 1 && arr.length) {
+                        what = a[--L];
+                        while ((ax= arr.indexOf(what)) !== -1) {
+                            arr.splice(ax, 1);
+                        }
+                    }
+                    return arr;
+                }
+                
+                console.log("dataAntrian",dataAntrian);
+                let realSortAntrian = [];
+                for (const iterator3 of dataAntrian) {
+                    realSortAntrian.push(iterator3[1])
+                }
+                console.log("realSortAntrian",realSortAntrian);
+
+                let indexdummy = 0;
+                for (let iterator4 of antrianLewat.join().split(",")) {                    
+                    removeA(realSortAntrian, iterator4);
+                    for(var i = 0; i <= dataAntrian.length - 1; i++){
+                        if(dataAntrian[i][1] == iterator4){
+                            dataAntrian.splice(i--,1);
+                        }
+                    }
+                    indexdummy++;
+                }
+                
+                console.log("realSortAntrianAfter",realSortAntrian);
+                console.log("dataAntrianAFTER",dataAntrian);
+
+                // const index = strSortAntrian.indexOf(minimum[1]);
+                // if (index > -1) {
+                //     strSortAntrian.splice(index, 1);
+                // }
+                // strSortAntrian.unshift(minimum[1]);
+                // if(!ketemu){
+                //     var newIdReservasi = minimum[1];
+                // }
+                // let newNama_pelanggan = minimum[2];
+                // var joinStrSortAntrian = strSortAntrian.join();
+                // console.log("strSortAntrian.join()",strSortAntrian.join());
+                
+                if(!ketemu){
+                    var newIdReservasi = dataAntrian[1];
+                }
+                let newNama_pelanggan = dataAntrian[2];
+                // var joinStrSortAntrian = strSortAntrian.join();
+                console.log("strSortAntrian.join()",strSortAntrian.join());
                 let list = `<table class="table">
                 <thead>
                     <th>ID</th>
@@ -247,17 +348,14 @@ $("#menu-toggle").click(function(e) {
                 <tbody>`;
                 let jamMulai = [];
                 let jamAkhir = [];
-                for (let dataRealReservasi of realDataReservasi) {
-                    // console.log(dataRealReservasi.jam);
-                    list += `<tr><td>${dataRealReservasi.id}</td><td>${dataRealReservasi.nama}</td><td>${dataRealReservasi.jam}</td></tr>`;  
-                    jamMulai.push(dataRealReservasi.jam.substring(0, 2));
-                    jamAkhir.push(dataRealReservasi.jam.substr(6, 2));
+                for (let dataRealReservasi of dataAntrian) {
+                    list += `<tr><td>${dataRealReservasi[1]}</td><td>${dataRealReservasi[2]}</td><td>${dataRealReservasi[3]}</td></tr>`;  
+                    jamMulai.push(dataRealReservasi[3].substring(0, 2));
+                    jamAkhir.push(dataRealReservasi[3].substr(6, 2));
                 }
-                // console.log(jamMulai.sort());
                 console.log("jam Mulai", jamMulai);
                 console.log("jam Akhir", jamAkhir);
-
-                // console.log(jamAntri.split(","));
+                console.log("time",time);
                 list += `</tbody>
                 </table>`;
               modalTitle.textContent = `Meja ${id_meja}`;
@@ -271,10 +369,10 @@ $("#menu-toggle").click(function(e) {
               
               let	isi =`
             <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
-            <a href="menu.php?from=reservasi&jamreservasi=${jamreservasianda}&izin=true&idReservasi=${newIdReservasi}&antrian=${joinStrSortAntrian}&meja=${id_meja}"><button type="button" class="btn btn-primary">Pesan</button></a>
+            <a href="menu.php?from=reservasi&jamreservasi=${jamreservasianda}&izin=true&idReservasi=${realSortAntrian[0]}&antrian=${realSortAntrian.join()}&meja=${id_meja}"><button type="button" class="btn btn-primary tombolPesan2">Pesan</button></a>
             <a href="kosong.php?antri=${idReservasi}"><button type="button" class="btn btn-primary" ${hidden}>Kosongkan</button></a>
             <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
-            <br><br><h5>jadwal reservasi</h5>
+            <br><br><h5>Jadwal Reservasi</h5>
             ${list}
             <br>
             <div class="formReservasi" hidden>
@@ -301,6 +399,13 @@ $("#menu-toggle").click(function(e) {
             </div>
             `;              
                 modalBody.innerHTML = isi;
+                let tombolPesan2 = document.querySelector(".tombolPesan2");
+                var today = new Date();
+                var time = today.getHours();
+                if(time < 10){
+                    console.log("bener");
+                    tombolPesan2.disabled = true;
+                }
                 document.querySelector(".reservasiToggle").addEventListener('click', function(){
                       document.querySelector(".formReservasi").toggleAttribute('hidden');
                 })
@@ -327,6 +432,8 @@ $("#menu-toggle").click(function(e) {
                         inputJam1.value = "";
                     }
 
+                    
+
                     if(inputJam1.value.length == 2){
                         for (let i = 0; i < jamMulai.length; i++) {
                             if(inputJam1.value > jamMulai[i] && inputJam1.value < jamAkhir[i]){
@@ -340,6 +447,10 @@ $("#menu-toggle").click(function(e) {
                             }
                             
                         } 
+                        if(inputJam1.value <= time){
+                            alert("Waktu Sudah Berlalu");
+                            inputJam1.value = "";
+                        }
                     }
                 });
                 inputJam2.addEventListener("input",(e)=>{
@@ -369,6 +480,10 @@ $("#menu-toggle").click(function(e) {
                                 alert("Sudah ada yang memesan pada waktu tersebut");
                                 inputJam2.value = '';
                             }
+                        }
+                        if(inputJam2.value <= time){
+                            alert("Waktu Sudah Berlalu");
+                            inputJam2.value = "";
                         } 
                     }
                 });

@@ -9,22 +9,19 @@
 	$id_user = $_SESSION['id_user'];
 	$tambah = $_POST['tambah'] || false;
 	$result = mysqli_query($db,"SELECT * FROM reservasi");
-	$antrianQuery = mysqli_query($db,"SELECT jamAntri,antrian FROM meja WHERE id_meja = ".$_POST['id']);
+	$antrianQuery = mysqli_query($db,"SELECT antrian FROM meja WHERE id_meja = ".$_POST['id']);
 	$listAntrian = mysqli_fetch_assoc($antrianQuery);
-	$antrian = $listAntrian['jamAntri']. "," . $waktu;
 	$jmlReservasi = mysqli_num_rows($result) + 1;
 	$tambahReservasi = $listAntrian['antrian']. "," .$jmlReservasi;
 	if($tambah){
 		mysqli_query($db,"INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`, `email`) VALUES (NULL, '$id_user', '".$date."', '".$waktu."', '".$_POST['nama']."', '".$_POST['no']."', '".$_POST['email']."')");
-		$antri = $antrian;
 		$reservasi = $tambahReservasi;
-		mysqli_query($db,"UPDATE meja SET jamAntri = '$antri', antrian = '$reservasi' WHERE id_meja = ".$_POST['id']);	
+		mysqli_query($db,"UPDATE meja SET antrian = '$reservasi' WHERE id_meja = ".$_POST['id']);	
 		header("location:index.php");
 	}else{
-		mysqli_query($db,"INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`, `email`) VALUES (NULL, '$id_user', NOW(), '".$waktu."', '".$_POST['nama']."', '".$_POST['no']."', '".$_POST['email']."')");
-		$antri = $waktu;
+		mysqli_query($db,"INSERT INTO `reservasi` (`id_reservasi`, `id_user`, `tanggal_reservasi`, `jam`, `nama_pelanggan`, `no_telp`, `email`) VALUES (NULL, '$id_user', '$date', '".$waktu."', '".$_POST['nama']."', '".$_POST['no']."', '".$_POST['email']."')");
 		$reservasi = $jmlReservasi;
-		mysqli_query($db,"UPDATE meja SET id_reservasi = $jmlReservasi, status = 'reservasi', jamAntri = '$antri', antrian = '$reservasi'  WHERE id_meja = ".$_POST['id']);	
+		mysqli_query($db,"UPDATE meja SET id_reservasi = $jmlReservasi, status = 'reservasi',antrian = '$reservasi'  WHERE id_meja = ".$_POST['id']);	
 		header("location:index.php");
 	}
 	
