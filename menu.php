@@ -10,7 +10,13 @@
 
 		$_GET['idReservasi'] = !empty($_GET['idReservasi']) && is_string($_GET['idReservasi']) ? $_GET['idReservasi'] : '1';
 		$_GET['antrian'] = !empty($_GET['antrian']) && is_string($_GET['antrian']) ? $_GET['antrian'] : '';
-		mysqli_query($db,"UPDATE meja SET id_reservasi ='".$_GET['idReservasi']."' , antrian ='".$_GET['antrian']."'  WHERE id_meja ='".$_GET['meja']."' ");
+		if($_GET['idReservasi'] == "undefined" || $_GET['antrian'] ==""){
+			$_GET['idReservasi'] = "1";
+			mysqli_query($db,"UPDATE meja SET id_reservasi ='".$_GET['idReservasi']."' , antrian ='".$_GET['antrian']."',status = 'kosong'  WHERE id_meja ='".$_GET['meja']."' ");
+		}else{
+			mysqli_query($db,"UPDATE meja SET id_reservasi ='".$_GET['idReservasi']."' , antrian ='".$_GET['antrian']."'  WHERE id_meja ='".$_GET['meja']."' ");
+		}
+		
 		
 	
 		$jamBerapaSkrng =  query("SELECT TIME_FORMAT(NOW(), '%H') AS time ");
