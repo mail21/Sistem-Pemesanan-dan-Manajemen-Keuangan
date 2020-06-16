@@ -82,6 +82,8 @@ $("#menu-toggle").click(function(e) {
       <input name="jam2" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no2" maxlength = "2">
       <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="Menit" value="00" readonly maxlength = "2">
       <br>
+                <h5 style="color: red">Reservasi minimal satu jam</h5>
+                <br>
       <label for="nama">Nama</label>
       <input name="nama" type="text" class="form-control" value="${namaSession}" id="nama" placeholder="Nama Pelanggan">
       <label for="email">Email</label>
@@ -395,6 +397,8 @@ $("#menu-toggle").click(function(e) {
                 <label for="no">Jam Berakhir:</label>
                 <input name="jam2" type="text" class="form-control inputWaktu mt-3" placeholder="Jam" id="no" maxlength = "2">
                 <input name="menit2" type="text" class="form-control inputWaktu mt-3" placeholder="00" value="00" maxlength = "2" readonly >
+                <br>
+                <h5 style="color: red">Reservasi minimal satu jam</h5>
                 <br>
                 <label for="nama">Nama</label>
                 <input name="nama" type="text" class="form-control" value="${namaSession}" id="nama" placeholder="Nama Pelanggan">
