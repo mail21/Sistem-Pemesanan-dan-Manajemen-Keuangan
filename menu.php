@@ -26,13 +26,7 @@
 		// echo "<br>"; 
 		// echo $_GET['jamreservasi'] . "<" . $jamBerapaSkrng[0]['time'];
 		
-		if($jamBerapaSkrng[0]['time'] > $_GET['jamreservasi'] ){
-			echo "<script>
-			alert('Anda Telah Melewatkan Reservasi Anda');
-			window.location= 'index.php'
-
-			</script>";
-		}else if($_GET['jamreservasi'] != $jamBerapaSkrng[0]['time']){
+		if($_GET['jamreservasi'] != $jamBerapaSkrng[0]['time'] && $_SESSION['tipe'] != "Pelayan" ){
 			echo "<script>
 			alert('Anda belum bisa melakukan pemesanan sekarang');
 			window.location= 'index.php'
