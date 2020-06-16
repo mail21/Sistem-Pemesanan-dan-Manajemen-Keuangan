@@ -26,7 +26,7 @@
     //   echo mysqli_error($db);
     // }
     
-    mysqli_query($db, "UPDATE meja SET id_reservasi = '1', id_user = '$id_user' ,status = 'aktif' WHERE id_meja = $id_meja");
+    mysqli_query($db, "UPDATE meja SET id_user = '$id_user' ,status = 'aktif' WHERE id_meja = $id_meja");
     header("location:index.php");
 
 

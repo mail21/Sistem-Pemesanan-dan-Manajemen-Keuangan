@@ -13,18 +13,20 @@ echo 'Indonesian Timezone: ' . date('d-m-Y H:i:s');
 $idSumber = $_POST['idSumber'];
 $id_meja = $_POST['id_meja'];
 $tanggal = date("Ym");
+$jamSkrng = date('H');
 $inputUang = $_POST['inputUang'];
 $total = $_POST['total'];
 $kembalian = (int)$inputUang - (int)$total;
 $nomor = query("SELECT no_transaksi FROM order_detail ORDER BY tanggal DESC LIMIT 1");
-$antrian = query("SELECT antrian FROM meja WHERE id_meja = $id_meja");
+$antrian = query("SELECT jam,antrian FROM meja JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi WHERE id_meja = $id_meja");
 $idOrderDetail = (int)substr($nomor[0]['no_transaksi'],6) + 1;
 var_dump(strlen($antrian[0]['antrian']));
 echo $antrian[0]['antrian'];
 echo "<br>";
-echo $nomor[0]['no_transaksi'];
+var_dump(substr($antrian[0]['jam'],0,2));
+
 echo "<br>";
-echo substr($nomor[0]['no_transaksi'],6);
+echo "jam skrng : " . $jamSkrng; 
 echo "<br>";
 echo "Tanggal : ". $tanggal . $idOrderDetail;
 $noTransaksi = $tanggal . $idOrderDetail;
@@ -38,7 +40,11 @@ if(strlen ($antrian[0]['antrian']) >= 3 ){
 $nextMeja = substr($antrianStr, 0, 2);
 var_dump($nextMeja);
 if(strlen($nextMeja ) >= 2){
-    mysqli_query($db,"UPDATE meja SET id_reservasi = '$nextMeja', status = 'reservasi', antrian = '$antrianStr' WHERE id_meja = $id_meja");
+    if($jamSkrng < substr($antrian[0]['jam'],0,2)){
+        mysqli_query($db,"UPDATE meja SET  status = 'reservasi' WHERE id_meja = $id_meja");
+    }else{
+        mysqli_query($db,"UPDATE meja SET id_reservasi = '$nextMeja', status = 'reservasi', antrian = '$antrianStr' WHERE id_meja = $id_meja");
+    }
 }else{
     mysqli_query($db,"UPDATE meja SET id_reservasi = '1', status = 'kosong', antrian = '$antrianStr' WHERE id_meja = $id_meja");
 }
