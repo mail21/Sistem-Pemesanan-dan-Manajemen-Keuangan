@@ -223,16 +223,16 @@
 							echo "<tr>
 								<th scope='row'>$no</th>";
 								if($order['siap'] == "1"){
-									echo "<td><a href='#'><button class='btn btn-success btnSiap'>Ready</button></a></td>";
+									echo "<td><a href='#'><button class='btn btn-success btnSiap' readOnly>Ready</button></a></td>";
 								}else{
-									echo "<td><a href='siap.php?siap=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSiap'>Not Ready</button></a></td>";
+									echo "<td><a href='siap.php?tipe=$session_value&siap=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSiap'>Not Ready</button></a></td>";
 
 								}
 
 								if($order['saji'] == "1"){
 									echo "<td><a href='#'><button class='btn btn-success btnSaji'>Ready</button></a></td>";
 								}else{
-									echo "<td><a href='siap.php?saji=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSaji'>Not Ready</button></a></td>";
+									echo "<td><a href='siap.php?tipe=$session_value&saji=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSaji'>Not Ready</button></a></td>";
 								}
 							echo"<td>".$order['nomormeja']."</td>
 								<td>".$order['namamenu']."</td>
@@ -280,7 +280,7 @@
 let btnSiap = document.querySelectorAll('.btnSiap');
 for (let iterator of btnSiap) {
 	iterator.addEventListener("click", ()=>{
-		if(tipe != "Koki"){
+		if(tipe != "Koki" || tipe == "Pelayan"){
 			alert("Anda Tidak mempunyai hak");	
 		}
 	});
@@ -290,7 +290,7 @@ for (let iterator of btnSiap) {
 let btnSaji = document.querySelectorAll('.btnSaji');
 for (let iterator2 of btnSaji) {
 	iterator2.addEventListener("click", ()=>{
-		if(tipe != "Pelayan"){
+		if(tipe != "Pelayan" || tipe == "Koki"){
 			alert("Anda Tidak mempunyai hak");	
 		}
 	});
