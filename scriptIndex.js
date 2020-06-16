@@ -325,7 +325,8 @@ $("#menu-toggle").click(function(e) {
                 
                 console.log("realSortAntrianAfter",realSortAntrian);
                 console.log("dataAntrianAFTER",dataAntrian);
-
+                let newDataAntrian =  dataAntrian;
+                console.log(newDataAntrian,"newDataAntrian");
                 // const index = strSortAntrian.indexOf(minimum[1]);
                 // if (index > -1) {
                 //     strSortAntrian.splice(index, 1);
@@ -339,9 +340,10 @@ $("#menu-toggle").click(function(e) {
                 // console.log("strSortAntrian.join()",strSortAntrian.join());
                 
                 if(!ketemu){
-                    var newIdReservasi = dataAntrian[1];
+                    var newIdReservasi = newDataAntrian[0][1];
                 }
-                let newNama_pelanggan = dataAntrian[2];
+                let newNama_pelanggan = newDataAntrian[0][2];
+                console.log(newDataAntrian[0][2]);
                 // var joinStrSortAntrian = strSortAntrian.join();
                 console.log("strSortAntrian.join()",strSortAntrian.join());
                 let list = `<table class="table">
@@ -371,7 +373,8 @@ $("#menu-toggle").click(function(e) {
               if(newNama_pelanggan !== undefined){
                 nama_pelanggan = newNama_pelanggan;
               }
-              
+              console.log(newNama_pelanggan);
+              console.log(nama_pelanggan);
               let	isi =`
             <h3>Meja Reservasi Milik ${nama_pelanggan}</h3>
             <a href="menu.php?from=reservasi&jamreservasi=${jamreservasianda}&izin=true&idReservasi=${realSortAntrian[0]}&antrian=${realSortAntrian.join()}&meja=${id_meja}"><button type="button" class="btn btn-primary tombolPesan2">Pesan</button></a>

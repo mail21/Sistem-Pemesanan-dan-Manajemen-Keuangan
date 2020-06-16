@@ -10,5 +10,4 @@ if(isset($_GET['siap']) && $_GET['tipe'] == "Koki"){
     header("location:index.php");
 }else{
     header("location:index.php");
-
 }
