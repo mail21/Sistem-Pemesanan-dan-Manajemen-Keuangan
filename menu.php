@@ -20,11 +20,6 @@
 		
 	
 		$jamBerapaSkrng =  query("SELECT TIME_FORMAT(NOW(), '%H') AS time ");
-		// var_dump($jamBerapaSkrng );
-		// echo "<br>";
-		// var_dump($_GET['jamreservasi']  );
-		// echo "<br>"; 
-		// echo $_GET['jamreservasi'] . "<" . $jamBerapaSkrng[0]['time'];
 		
 		if($_GET['jamreservasi'] != $jamBerapaSkrng[0]['time'] && $_SESSION['tipe'] != "Pelayan" ){
 			echo "<script>

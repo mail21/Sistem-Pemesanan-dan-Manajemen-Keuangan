@@ -37,6 +37,14 @@
 			$jamreservasiandaPHP = substr($userQuery[0]['jam'],0,2);
 		}
 	}
+
+	$_GET['query'] = !empty($_GET['query']) && is_string($_GET['query']) ? $_GET['query'] : '';
+	if($_GET['query'] == "mejakosong"){
+		mysqli_query($db,"UPDATE meja SET antrian = '', id_reservasi = 1, status ='kosong' WHERE id_meja = ".$_GET['id_meja']);
+		echo "<script>
+			window.location = 'index.php';
+			</script>";
+	}
 	
 	if(!isset($jamreservasiandaPHP)){
 		$jamreservasiandaPHP = "NULL";
@@ -135,6 +143,7 @@
 				<?php 
 					foreach ($mejaQuery as $meja) {
 						$status = $meja['status'];
+						$tiapReservasi = explode(",",$meja['antrian']);
 						if ($meja['status'] === "kosong") {
 							echo "<div class='meja $status mr-2' data-toggle='modal' data-id='".$meja['id_meja']."' data-status=$status data-target='#ModalAktif'><span class='id'>".$meja['id_meja']."</span></div>";
 						}else if($meja['status'] === "reservasi"){
@@ -143,14 +152,10 @@
 							$mejaAntrianLength = count($mejaAntrian);
 							$x = $mejaAntrianLength;
 							for ($i=0; $i < $mejaAntrianLength ; $i++) {
-								
 								$reservasiQuery = query("SELECT nama_pelanggan,jam,antrian FROM reservasi JOIN meja ON meja.id_reservasi = reservasi.id_reservasi WHERE reservasi.id_reservasi = ".$mejaAntrian[$i]);
 								foreach ($reservasiQuery as $x) {
 									$b = 0;
 									$listAntriFromDb = explode(",",$x['antrian']);
-									// echo "===================<br>";
-									// $datamysqlantrian = $x['antrian'];
-									// echo "<br>";
 									foreach ($listAntriFromDb as $y) {
 										if ($b>0) {
 											$strReservasi.=",";
@@ -163,7 +168,7 @@
 										$strReservasi .= "{'id':'$idreservasiforjs','nama':'$nama_pel','jam':'$jam'}";
 										$b++;
 									}
-									echo "<div style='width:90px;' class='meja $status mr-2' data-datareservasi=[$strReservasi] data-id='".$meja['id_meja']."' data-antrian='".$meja['antrian']."' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
+									echo "<div style='width:90px;' class='meja $status mr-2' data-datareservasi=[$strReservasi] data-id='".$meja['id_meja']."' data-toggle='modal' data-pelanggan='".$meja['nama_pelanggan']."' data-status=$status data-target='#ModalAktif'> <span class='id'>".$meja['id_meja']."</span></div>";
 									$strReservasi = '';
 								}
 								
@@ -172,6 +177,24 @@
 							$menu = [];
 							$id = $meja['id_meja'];
 							$menuQuery = query("SELECT * FROM order_list JOIN menu ON order_list.id_menu = menu.id_menu WHERE id_meja = ".$meja['id_meja']." AND order_list.no_transaksi = '0000000'");
+							$strReservasi2 = "";
+							for ($i=0; $i < count($tiapReservasi); $i++) {
+								if ($i>0) {
+									$strReservasi2 .=",";
+								}
+								if($tiapReservasi[0] != ""){
+									$cariReservasiAntrianQuery = mysqli_query($db,"SELECT id_reservasi,nama_pelanggan,jam FROM reservasi WHERE id_reservasi = " . $tiapReservasi[$i]);
+									
+									$cariReservasiAntrian = mysqli_fetch_assoc($cariReservasiAntrianQuery);
+									$idreservasiforjs2 = $cariReservasiAntrian["id_reservasi"];
+									$nama_pel2 = preg_replace('/\s+/', '', $cariReservasiAntrian["nama_pelanggan"]);
+									$jam2 = $cariReservasiAntrian["jam"];
+									$strReservasi2 .= "{'id':'$idreservasiforjs2','nama':'$nama_pel2','jam':'$jam2'}";
+								}
+
+							}
+							echo $meja['id_meja'] . " : " .$strReservasi2;
+							echo "<br>";
 							$str = "";
 							$a = 0;
 							foreach ($menuQuery as $menus) {
@@ -186,7 +209,7 @@
 								$str .= "{'id':'$id','nama':'$nama','quantity':$qt,'total':$total,'ket':'$ket'}";
 								$a++;
 							}
-							echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."' data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
+							echo "<div class='meja $status mr-2' data-id='".$meja['id_meja']."' data-datareservasi2=[$strReservasi2] data-toggle='modal' data-target='#ModalAktif' data-status=$status data-menu=[$str] > <span class='id'>".$meja['id_meja']."</span></div>";
 						}
 					}
 				?>
