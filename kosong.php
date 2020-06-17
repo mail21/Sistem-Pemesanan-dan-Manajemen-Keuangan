@@ -23,16 +23,16 @@ array_splice($arrayAntri,0,1);
 echo "arrayantri : ";
 var_dump($arrayAntri);
 $newAntri = $arrayAntri[0];
-echo "<br>";
+echo "<br> next antri:";
 var_dump($newAntri);
-echo "<br> ini antrian";
+echo "<br> ini antrian:";
 $antrian = implode(",",$arrayAntri);
-$newAntrian = substr($antrian,0,2);
-var_dump($antrian);
+// $newAntrian = substr($antrian,0,2);
 echo "<br>";
+var_dump($antrian);
 
 if($lengthArray>1){
-    $query1 = "UPDATE meja SET id_reservasi = '$newAntrian', antrian = '$antrian' WHERE id_meja = " . $_GET['meja'];
+    $query1 = "UPDATE meja SET id_reservasi = '$newAntri', antrian = '$antrian' WHERE id_meja = " . $_GET['meja'];
     var_dump($query1);
     $res = mysqli_query($db,$query1);
     header("location:index.php");

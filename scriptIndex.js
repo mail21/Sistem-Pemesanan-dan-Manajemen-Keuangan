@@ -383,7 +383,8 @@ $("#menu-toggle").click(function(e) {
                 document.querySelector('input[name="menit"]').value = "";
             }
         });
-
+        var today = new Date();
+        var time = today.getHours();
         let inputJam1 = document.querySelector('input[name="jam"]');
         let inputJam2 = document.querySelector('input[name="jam2"]')
         document.querySelector('input[name="menit2"]').addEventListener("input",(e)=>{
@@ -398,7 +399,7 @@ $("#menu-toggle").click(function(e) {
                 alert("Jam Operasional 10:00 - 23:00");
                 inputJam1.value = "";
             }
-
+            
             
 
             if(inputJam1.value.length == 2){
@@ -438,7 +439,7 @@ $("#menu-toggle").click(function(e) {
 
             
                 for (let i = 0; i < jamMulai.length; i++) {
-                    if(inputJam1.value > jamMulai[i] && inputJam1.value < jamAkhir[i]){
+                    if(inputJam2.value > jamMulai[i] && inputJam2.value < jamAkhir[i]){
                         alert("Sudah ada yang memesan pada waktu tersebut");
                         inputJam2.value = '';
                     }
@@ -446,6 +447,16 @@ $("#menu-toggle").click(function(e) {
                     if(inputJam2.value == jamAkhir[i]){
                         alert("Sudah ada yang memesan pada waktu tersebut");
                         inputJam2.value = '';
+                    }
+                    let selisihJam = inputJam2.value - inputJam1.value ;
+                    let jamKurang = inputJam2.value ;
+                    for (let index = 1; index < selisihJam; index++) {
+                        jamKurang -= 1
+                        console.log("jamKurang",jamKurang,jamMulai[i],jamAkhir[i]);
+                        if(jamMulai[i]  == jamKurang ||jamAkhir[i]  == jamKurang){
+                            alert("Tidak bisa melakukan reservasi karean sudah ada yang memesan pada waktu tersebut");
+                            break;
+                        }
                     }
                 }
                 if(inputJam2.value <= time){
@@ -620,9 +631,11 @@ $("#menu-toggle").click(function(e) {
                             inputJam2.value = '';
                         }
 
+                        
+
                     
                         for (let i = 0; i < jamMulai.length; i++) {
-                            if(inputJam1.value > jamMulai[i] && inputJam1.value < jamAkhir[i]){
+                            if(inputJam2.value > jamMulai[i] && inputJam2.value < jamAkhir[i]){
                                 alert("Sudah ada yang memesan pada waktu tersebut");
                                 inputJam2.value = '';
                             }
@@ -631,6 +644,17 @@ $("#menu-toggle").click(function(e) {
                                 alert("Sudah ada yang memesan pada waktu tersebut");
                                 inputJam2.value = '';
                             }
+                            let selisihJam = inputJam2.value - inputJam1.value ;
+                            let jamKurang = inputJam2.value ;
+                            for (let index = 1; index < selisihJam; index++) {
+                                jamKurang -= 1
+                                console.log("jamKurang",jamKurang,jamMulai[i],jamAkhir[i]);
+                                if(jamMulai[i]  == jamKurang ||jamAkhir[i]  == jamKurang){
+                                    alert("Tidak bisa melakukan reservasi karean sudah ada yang memesan pada waktu tersebut");
+                                    break;
+                                }
+                            }
+                        
                         }
                         if(inputJam2.value <= time){
                             alert("Waktu Sudah Berlalu");
