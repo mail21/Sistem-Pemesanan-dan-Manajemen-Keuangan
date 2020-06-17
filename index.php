@@ -45,6 +45,28 @@
 			window.location = 'index.php';
 			</script>";
 	}
+
+	$mejaNomorReservasi = "";
+	if($_SESSION['tipe'] == "Pelanggan"){
+		$cariIdQuery = mysqli_query($db,"SELECT id_reservasi FROM `reservasi` WHERE id_user = ". $_SESSION['id_user'] ." AND tanggal_reservasi = DATE(NOW())");
+		if(mysqli_affected_rows($db)){
+			$cariId = mysqli_fetch_assoc($cariIdQuery);
+		}else{
+			$cariId["id_reservasi"] = 1;
+		}
+		$cariMejaQuery = query("SELECT antrian,id_meja FROM `meja` JOIN reservasi ON meja.id_reservasi = reservasi.id_reservasi WHERE tanggal_reservasi = DATE(NOW()) ");
+		$c=0;
+		foreach ($cariMejaQuery as $iterator) {
+			$explodeAntri = explode(",",$iterator['antrian']);
+			for ($iAntri=0; $iAntri < count($explodeAntri) ; $iAntri++) { 
+				if($cariId['id_reservasi'] == $explodeAntri[$iAntri]){
+					$mejaNomorReservasi = $iterator["id_meja"];
+				}	
+			}
+			$c++;
+		}
+	}
+	
 	
 	if(!isset($jamreservasiandaPHP)){
 		$jamreservasiandaPHP = "NULL";
@@ -55,7 +77,7 @@
 	var namaSession='<?php echo $session_nama;?>';
 	var emailSession='<?php echo $session_email;?>';
 	var jamreservasianda = '<?php echo $jamreservasiandaPHP?>' ;
-
+console.log("before",jamreservasianda);
 </script>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +106,11 @@
 			<a href="halamanStaff.php" class="list-group-item list-group-item-action bg-light linkLaporan">Staff</a>
 		<?php endif; ?>  
 		<a href="logout.php" class="list-group-item list-group-item-action bg-light">logout</a>
+		<?php if($mejaNomorReservasi != ""){ ?>
+			<div style="padding: 5px; text-align:center;font-weight:bold;">
+				<?= "Anda reservasi Pada meja $mejaNomorReservasi"; ?>
+			</div>
+		<?php } ?>
 	</div>
     </div>
 	<!-- /#sidebar-wrapper -->

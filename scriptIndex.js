@@ -51,6 +51,7 @@ $("#menu-toggle").click(function(e) {
             dataAntrian.push(jamAwal);
             strSortAntrian.push(dataRealReservasi.id);
             jamAkhirTest = dataRealReservasi.jam.substr(6, 2);
+            console.log("jamAwal[0]",jamAwal[0]);
             if(jamAwal[0] < time){
                 antrianLewat.push(jamAwal[1]);
             }
@@ -62,6 +63,8 @@ $("#menu-toggle").click(function(e) {
                 if(jamreservasianda  === "NULL"){
                     jamreservasianda = time;
                 }
+            }else{
+                console.log("woy");
             }
             i++;
         }
@@ -248,6 +251,10 @@ $("#menu-toggle").click(function(e) {
                 }
             });
           }else if(statusMeja == "aktif"){
+            if(tipe === "Kasir"){
+                namaSession = "";
+                emailSession = "";
+            }
               document.querySelector('.modal-dialog').classList.add('modal-lg');
               let data = await row.dataset.menu;
               let dataReservasiJs = await row.dataset.datareservasi2; 
@@ -265,7 +272,9 @@ $("#menu-toggle").click(function(e) {
                 tambah = true;
 
               }
+
               let dataReservasi = sort(realDataReservasi,jamreservasianda);
+
               let newDataAntrian =  dataReservasi[0];
 
               console.log("dataReservasi",dataReservasi);
