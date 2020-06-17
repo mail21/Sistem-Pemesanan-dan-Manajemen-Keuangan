@@ -280,9 +280,9 @@ console.log("before",jamreservasianda);
 								}
 
 								if($order['saji'] == "1"){
-									echo "<td><a href='#'><button class='btn btn-success btnSaji'>Ready</button></a></td>";
+									echo "<td><a href='#'><button class='btn btn-success btnSaji'>Served</button></a></td>";
 								}else{
-									echo "<td><a href='siap.php?tipe=$session_value&saji=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSaji'>Not Ready</button></a></td>";
+									echo "<td><a href='siap.php?tipe=$session_value&saji=1&id=".$order['idOrder']."'><button class='btn btn-danger btnSaji'>Not Serve</button></a></td>";
 								}
 							echo"<td>".$order['nomormeja']."</td>
 								<td>".$order['namamenu']."</td>
