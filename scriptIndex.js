@@ -294,7 +294,7 @@ $("#menu-toggle").click(function(e) {
                 }
                 list += `</tbody>
                 </table>`;
-
+                console.log(menu);
               let isi = `
               <button type="button" class="btn btn-secondary reservasiToggle">Reservasi</button>
               <a href="menu.php?izin=true&meja=${id_meja}"><button type="button" class="btn btn-primary mb-3" style="margin-top:16px">Pesan</button></a>
@@ -357,6 +357,9 @@ $("#menu-toggle").click(function(e) {
               `;
               modalBody.innerHTML = isi;
               const inputUang = document.querySelector("#inputUang");
+              document.querySelector("#btnKonfirmasi").addEventListener("click",()=>{
+                setTimeout(function(){ window.location="index.php" }, 500);
+            })
               inputUang.addEventListener("input",(e)=>{
                   if(tipe === "Koki" || tipe === "Pelayan"){
                       alert("Anda tidak mempunyai akses");

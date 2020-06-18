@@ -327,28 +327,6 @@ console.log("before",jamreservasianda);
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="scriptindex.js"></script>
 <script>
-let btnSiap = document.querySelectorAll('.btnSiap');
-for (let iterator of btnSiap) {
-	iterator.addEventListener("click", ()=>{
-		// if(tipe != "Koki" || tipe == "Pelayan"){
-		// 	alert("Anda Tidak mempunyai hak");
-		// 	window.location = "index.php";	
-
-		// }
-	});
-	
-}
-
-let btnSaji = document.querySelectorAll('.btnSaji');
-for (let iterator2 of btnSaji) {
-	iterator2.addEventListener("click", ()=>{
-		// if(tipe != "Pelayan" || tipe == "Koki"){
-		// 	alert("Anda Tidak mempunyai hak");	
-		// 	window.location = "index.php";	
-		// }
-	});
-	
-}
     
 if(tipe === "Koki" ){
     btnDenah.hidden = true;
