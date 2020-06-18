@@ -330,9 +330,11 @@ console.log("before",jamreservasianda);
 let btnSiap = document.querySelectorAll('.btnSiap');
 for (let iterator of btnSiap) {
 	iterator.addEventListener("click", ()=>{
-		if(tipe != "Koki" || tipe == "Pelayan"){
-			alert("Anda Tidak mempunyai hak");	
-		}
+		// if(tipe != "Koki" || tipe == "Pelayan"){
+		// 	alert("Anda Tidak mempunyai hak");
+		// 	window.location = "index.php";	
+
+		// }
 	});
 	
 }
@@ -340,9 +342,10 @@ for (let iterator of btnSiap) {
 let btnSaji = document.querySelectorAll('.btnSaji');
 for (let iterator2 of btnSaji) {
 	iterator2.addEventListener("click", ()=>{
-		if(tipe != "Pelayan" || tipe == "Koki"){
-			alert("Anda Tidak mempunyai hak");	
-		}
+		// if(tipe != "Pelayan" || tipe == "Koki"){
+		// 	alert("Anda Tidak mempunyai hak");	
+		// 	window.location = "index.php";	
+		// }
 	});
 	
 }
