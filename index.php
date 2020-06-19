@@ -220,8 +220,6 @@ console.log("before",jamreservasianda);
 								}
 
 							}
-							echo $meja['id_meja'] . " : " .$strReservasi2;
-							echo "<br>";
 							$str = "";
 							$a = 0;
 							foreach ($menuQuery as $menus) {
